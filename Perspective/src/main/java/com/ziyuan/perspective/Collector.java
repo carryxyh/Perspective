@@ -4,6 +4,7 @@
 package com.ziyuan.perspective;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Collector 收集信息的组件
@@ -12,4 +13,18 @@ import java.io.Serializable;
  * @since 2017-02-20
  */
 public interface Collector extends Serializable {
+
+    /**
+     * 去storage中取
+     *
+     * @return
+     */
+    List<Formatable> fetch();
+
+    /**
+     * storage 主动送过来
+     *
+     * @param formatables
+     */
+    void receive(List<Formatable> formatables);
 }

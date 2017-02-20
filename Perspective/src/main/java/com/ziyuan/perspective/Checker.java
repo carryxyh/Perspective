@@ -4,10 +4,10 @@
 package com.ziyuan.perspective;
 
 /**
- * Ender 标志着一个Branch的结束(一个Trace中可能存在多个Ender)
+ * Checker 这个checker用来检查超时的Trace
  *
  * @author ziyuan
  * @since 2017-02-20
  */
-public class Ender implements Invoke {
+public class Checker {
 }
