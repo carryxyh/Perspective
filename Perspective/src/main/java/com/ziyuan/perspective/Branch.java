@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author ziyuan
  * @since 2017-02-20
  */
-public final class Branch extends AbstractInvoke {
+public final class Branch extends ArgInvoke {
 
     private final ConcurrentLinkedQueue<Invoke> invokes = new ConcurrentLinkedQueue<Invoke>();
 
@@ -29,7 +29,13 @@ public final class Branch extends AbstractInvoke {
 
     @Override
     public String format() {
-        return null;
+        StringBuilder builder = new StringBuilder("BranchID : ");
+        builder.append(branchId).append(", TraceId : ").append(super.getTraceId()).append(", Args : [");
+        for (Object obj : super.getArgs()) {
+            builder.append(obj).append(", ");
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     public String getBranchId() {

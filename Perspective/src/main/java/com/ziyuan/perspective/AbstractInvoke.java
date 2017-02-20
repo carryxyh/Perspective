@@ -89,14 +89,6 @@ public abstract class AbstractInvoke implements Invoke {
         return null;
     }
 
-    public boolean isStarter() {
-        return false;
-    }
-
-    public boolean isEnder() {
-        return false;
-    }
-
     public boolean finish() {
         return this.state.getValue() <= InvokeState.OVER.getValue();
     }
@@ -112,6 +104,14 @@ public abstract class AbstractInvoke implements Invoke {
         } else {
             this.state = InvokeState.ERROR;
         }
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
     public abstract String format();

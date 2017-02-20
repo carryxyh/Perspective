@@ -18,12 +18,32 @@ public interface Invoke extends Serializable, Formatable {
      */
     int MAX_INVOKE_NODES = Integer.MAX_VALUE >> 15;
 
+    /**
+     * 获取一个invoke的名字
+     *
+     * @return invoke 名字
+     */
     String getName();
 
+    /**
+     * 获取持续时间
+     *
+     * @return 持续时间
+     */
     long getDuration();
 
+    /**
+     * 获取invoke的状态
+     *
+     * @return invoke状态
+     */
     InvokeState getState();
 
+    /**
+     * 属于哪个invoke
+     *
+     * @return 父invoke
+     */
     Invoke belongsTo();
 
     /**
@@ -33,14 +53,25 @@ public interface Invoke extends Serializable, Formatable {
      */
     Branch newChildBranch(Invoke invoke);
 
-    boolean isStarter();
-
-    boolean isEnder();
-
+    /**
+     * 是否已经完成(成功/失败)
+     *
+     * @return 是否完成
+     */
     boolean finish();
 
+    /**
+     * 是否成功
+     *
+     * @return 是否成功
+     */
     boolean isSuccess();
 
+    /**
+     * 设置异常
+     *
+     * @param t 异常
+     */
     void setError(Throwable t);
 
     enum InvokeState {

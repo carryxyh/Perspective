@@ -9,7 +9,7 @@ package com.ziyuan.perspective;
  * @author ziyuan
  * @since 2017-02-20
  */
-public class Trace extends AbstractInvoke {
+public class Trace extends ArgInvoke {
 
     private String traceId;
 

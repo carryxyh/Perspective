@@ -9,7 +9,7 @@ package com.ziyuan.perspective;
  * @author ziyuan
  * @since 2017-02-20
  */
-public class Starter extends AbstractInvoke {
+public class Starter extends SymbolInvoke {
 
     /**
      * 一个branch的开始时间
