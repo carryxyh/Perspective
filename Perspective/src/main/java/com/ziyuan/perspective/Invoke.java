@@ -26,17 +26,20 @@ public interface Invoke extends Serializable, Formatable {
 
     Invoke belongsTo();
 
-    void newChildBranch(Invoke invoke);
+    /**
+     * 只在多线程的情况下会使用到
+     *
+     * @param invoke 一个invoke
+     */
+    Branch newChildBranch(Invoke invoke);
 
     boolean isStarter();
 
     boolean isEnder();
 
-    boolean ended();
+    boolean finish();
 
     boolean isSuccess();
-
-    void setState(InvokeState state);
 
     void setError(Throwable t);
 
@@ -64,7 +67,7 @@ public interface Invoke extends Serializable, Formatable {
 
         int value;
 
-        InvokeState(int value){
+        InvokeState(int value) {
             this.value = value;
         }
 

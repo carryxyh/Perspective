@@ -3,6 +3,8 @@
  */
 package com.ziyuan.perspective;
 
+import java.util.UUID;
+
 /**
  * SymbolFactory,用于生成ID的工厂类
  *
@@ -10,4 +12,10 @@ package com.ziyuan.perspective;
  * @since 2017-02-20
  */
 public final class SymbolFactory {
+
+    private static final UUID UUID_TOOL = UUID.randomUUID();
+
+    public static String createTraceId(){
+        return UUID_TOOL.toString();
+    }
 }

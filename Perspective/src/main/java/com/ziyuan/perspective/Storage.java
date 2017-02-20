@@ -10,4 +10,6 @@ package com.ziyuan.perspective;
  * @since 2017-02-20
  */
 public interface Storage {
+
+    Trace getLocalTrace();
 }

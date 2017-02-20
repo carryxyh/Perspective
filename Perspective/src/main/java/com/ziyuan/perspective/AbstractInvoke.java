@@ -29,7 +29,7 @@ public abstract class AbstractInvoke implements Invoke {
     /**
      * 标识自己所在的Branch的Id
      */
-    private String ownBranchId;
+    private String ownerId;
 
     /**
      * 这是个全局Id,标识这个invoke属于哪个trace
@@ -39,12 +39,12 @@ public abstract class AbstractInvoke implements Invoke {
     /**
      * 默认一个长度为0的copyOnWrite的List
      */
-    private final List<Branch> CHILD_BRANCHES = new CopyOnWriteArrayList<Branch>();
+    private List<Branch> CHILD_BRANCHES;
 
     /**
      * 子分支的数量
      */
-    private final AtomicInteger CHILD_BRANCHES_NUM = new AtomicInteger(0);
+    private final AtomicInteger INDEX = new AtomicInteger(0);
 
     /**
      *
@@ -58,6 +58,7 @@ public abstract class AbstractInvoke implements Invoke {
 
     protected AbstractInvoke(String name) {
         this.name = name;
+        this.state = InvokeState.TRACING;
     }
 
     public String getName() {
@@ -76,25 +77,32 @@ public abstract class AbstractInvoke implements Invoke {
         return null;
     }
 
-    public void newChildBranch(Invoke invoke) {
+    public Branch newChildBranch(Invoke invoke) {
+        if (CHILD_BRANCHES == null) {
+            synchronized (this) {
+                if (CHILD_BRANCHES == null) {
+                    CHILD_BRANCHES = new CopyOnWriteArrayList<Branch>();
+                }
+            }
+        }
         //TODO 这里还有两步: 1.放入一个新的starter 2.拿出Trace的Invoke num并+1 跟MAX_INVOKE_NODES比较
-        this.CHILD_BRANCHES_NUM.incrementAndGet();
+        return null;
     }
 
-    public abstract boolean isStarter();
+    public boolean isStarter() {
+        return false;
+    }
 
-    public abstract boolean isEnder();
+    public boolean isEnder() {
+        return false;
+    }
 
-    public boolean ended() {
+    public boolean finish() {
         return this.state.getValue() <= InvokeState.OVER.getValue();
     }
 
     public boolean isSuccess() {
         return this.state == InvokeState.OVER;
-    }
-
-    public void setState(InvokeState state) {
-        this.state = state;
     }
 
     public void setError(Throwable t) {
