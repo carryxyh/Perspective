@@ -4,7 +4,7 @@
 package com.ziyuan.perspective;
 
 /**
- * Storage 存储中心
+ * Storage 存储中心,必须单例
  *
  * @author ziyuan
  * @since 2017-02-20
@@ -12,4 +12,6 @@ package com.ziyuan.perspective;
 public interface Storage {
 
     Trace getLocalTrace();
+
+    Trace getLocalTrace(String traceId);
 }

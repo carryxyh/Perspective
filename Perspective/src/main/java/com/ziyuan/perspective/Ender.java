@@ -9,7 +9,7 @@ package com.ziyuan.perspective;
  * @author ziyuan
  * @since 2017-02-20
  */
-public class Ender extends SymbolInvoke {
+public final class Ender extends SymbolInvoke {
 
     /**
      * 一个branch的结束时间
