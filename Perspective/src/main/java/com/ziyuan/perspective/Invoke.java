@@ -18,6 +18,9 @@ public interface Invoke extends Serializable, Formatable {
      */
     int MAX_INVOKE_NODES = Integer.MAX_VALUE >> 21;
 
+    /**
+     * invoke中最大的branch数量,防止线程过多
+     */
     int MAX_BRANCH_NODES = Integer.MAX_VALUE >> 25;
 
     /**
@@ -42,6 +45,13 @@ public interface Invoke extends Serializable, Formatable {
     InvokeState getState();
 
     /**
+     * 给一个invoke设置状态
+     *
+     * @param state state
+     */
+    void setState(InvokeState state);
+
+    /**
      * 是否已经完成(成功/失败)
      *
      * @return 是否完成
@@ -64,31 +74,25 @@ public interface Invoke extends Serializable, Formatable {
     void setError(Throwable error);
 
     /**
-     * 属于哪个branch
+     * 获得异常
      *
-     * @return branch
+     * @return 异常
      */
-    Branch belongsTo();
+    Throwable getError();
 
     /**
-     * 只在多线程的情况下会使用到
+     * 设置参数
+     *
+     * @param obj 参数集合
      */
-    void newChildBranch(Branch branch);
+    void setArgs(Object... obj);
 
     /**
-     * 给一个invoke设置状态
+     * 获得参数
      *
-     * @param state state
+     * @return 参数集合
      */
-    void setState(InvokeState state);
-
-    /**
-     * 给其中的一个branch设置结束点
-     *
-     * @param ender
-     * @param branchId
-     */
-    void endOneBranch(String branchId, Ender ender);
+    Object[] getArgs();
 
     enum InvokeState {
 

@@ -9,14 +9,28 @@ package com.ziyuan.perspective;
  * @author ziyuan
  * @since 2017-02-20
  */
-public class InvokeNode extends AbstractInvoke {
+public class InvokeNode extends AbstractCollectionInvoke {
 
-    protected InvokeNode(String name, String traceId) {
+    /**
+     * 拥有这个node的branchId
+     */
+    private final String ownerBranchId;
+
+    protected InvokeNode(String name, String traceId, String ownerBranchId) {
         super(name, traceId);
+        this.ownerBranchId = ownerBranchId;
+    }
+
+    public void newChildBranch(Branch branch) throws Exception {
+
     }
 
     @Override
     public String format() {
         return null;
+    }
+
+    public String getOwnerBranchId() {
+        return ownerBranchId;
     }
 }

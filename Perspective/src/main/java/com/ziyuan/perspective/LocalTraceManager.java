@@ -3,6 +3,8 @@
  */
 package com.ziyuan.perspective;
 
+import com.ziyuan.perspective.Exception.LocalTraceManagerClosedException;
+
 /**
  * LocalTraceManager threadLocal管理器，单例
  *
@@ -26,21 +28,21 @@ public final class LocalTraceManager {
 
     public Trace get() throws Exception {
         if (isClosed) {
-            throw new Exception("LocalTraceManager has closed !");
+            throw new LocalTraceManagerClosedException();
         }
         return LOCAL_MANAGER.get();
     }
 
     public void remove() throws Exception {
         if (isClosed) {
-            throw new Exception("LocalTraceManager has closed !");
+            throw new LocalTraceManagerClosedException();
         }
         LOCAL_MANAGER.remove();
     }
 
     public void add(Trace trace) throws Exception {
         if (isClosed) {
-            throw new Exception("LocalTraceManager has closed !");
+            throw new LocalTraceManagerClosedException();
         }
         LOCAL_MANAGER.set(trace);
     }

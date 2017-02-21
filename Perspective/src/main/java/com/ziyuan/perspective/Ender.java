@@ -9,24 +9,20 @@ package com.ziyuan.perspective;
  * @author ziyuan
  * @since 2017-02-20
  */
-public final class Ender extends SymbolInvoke {
+public final class Ender extends InvokeNode {
 
     /**
      * 一个branch的结束时间
      */
-    private long timestamp;
+    private long endTime;
 
-    protected Ender(String name, String traceId) {
-        super(name, traceId);
+    protected Ender(String name, String traceId, String ownerBranchId) {
+        super(name, traceId, ownerBranchId);
+        endTime = System.currentTimeMillis();
     }
 
     public long getTimestamp() {
-        return timestamp;
-    }
-
-    @Override
-    public boolean isEnder() {
-        return true;
+        return endTime;
     }
 
     @Override

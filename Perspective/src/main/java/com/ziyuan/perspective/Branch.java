@@ -3,6 +3,10 @@
  */
 package com.ziyuan.perspective;
 
+import com.ziyuan.perspective.Exception.InvokeNumsException;
+import com.ziyuan.perspective.Exception.TraceNotFoundException;
+import com.ziyuan.perspective.util.StorageUtil;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -11,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author ziyuan
  * @since 2017-02-20
  */
-public final class Branch extends ArgInvoke {
+public final class Branch extends AbstractInvoke {
 
     private final ConcurrentLinkedQueue<Invoke> invokes = new ConcurrentLinkedQueue<Invoke>();
 
@@ -21,24 +25,27 @@ public final class Branch extends ArgInvoke {
     private String branchId;
 
     /**
-     * 标志一个starter的开始
-     */
-    private Starter starter;
-
-    /**
-     * 这个branch属于哪个invoke
+     * 这个branch属于哪个invoke 只可能是InvokeNode和Trace
      */
     private Invoke ownerInvoke;
+
+    private long startTime;
 
     protected Branch(String name, String traceId, String branchId, Invoke ownerInvoke) {
         super(name, traceId);
         this.ownerInvoke = ownerInvoke;
         this.branchId = branchId;
-        this.starter = new Starter(name + "-starter", traceId);
-        invokes.add(starter);
+        this.startTime = System.currentTimeMillis();
     }
 
-    public void addInvoke(Invoke invoke) {
+    public void addInvoke(Invoke invoke) throws Exception {
+        Trace trace = StorageUtil.findTraceById(super.getTraceId());
+        if (trace == null) {
+            throw new TraceNotFoundException();
+        }
+        if (trace.increaseAndGetInvokeNum() > Invoke.MAX_INVOKE_NODES) {
+            throw new InvokeNumsException();
+        }
         this.invokes.add(invoke);
     }
 
@@ -54,28 +61,35 @@ public final class Branch extends ArgInvoke {
     }
 
     public String getBranchId() {
-        return this.branchId;
+        return branchId;
+    }
+
+    public Invoke getOwnerInvoke() {
+        return ownerInvoke;
     }
 
     /**
-     * 给一个branch设置结束点，根据结束点的状态判断整个branch的状态
+     * 添加一个Ender，结束这个branch
      *
      * @param ender
      */
-    public void setEnder(Ender ender) {
-        if (super.finished()) {
-            //如果已经结束，不改变原有状态,直接加入之后返回
-            invokes.add(ender);
+    public void addEnder(Ender ender) {
+        //设置结束时间
+        this.setDuration(ender.getTimestamp() - this.startTime);
+
+        try {
+            this.addInvoke(ender);
+        } catch (Exception e) {
+            super.setError(e);
+            super.setState(InvokeState.ERROR);
             return;
         }
+
         if (ender.isSuccess()) {
-            super.setState(InvokeState.OVER);
+            this.setState(InvokeState.OVER);
         } else {
-            super.setError(ender.getError());
-            //把拥有者设为失败
-            ownerInvoke.setError(ender.getError());
+            this.setError(ender.getError());
+            this.setState(ender.getState());
         }
-        super.duration = ender.getTimestamp() - this.starter.getStartTime();
-        invokes.add(ender);
     }
 }
