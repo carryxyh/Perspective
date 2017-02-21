@@ -16,22 +16,12 @@ public final class Ender extends SymbolInvoke {
      */
     private long timestamp;
 
-    private Throwable t;
-
     protected Ender(String name) {
         super(name);
     }
 
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public Throwable getError() {
-        return t;
-    }
-
-    public void setError(Throwable t) {
-        this.t = t;
     }
 
     @Override

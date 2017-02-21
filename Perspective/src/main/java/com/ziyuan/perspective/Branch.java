@@ -15,12 +15,27 @@ public final class Branch extends ArgInvoke {
 
     private final ConcurrentLinkedQueue<Invoke> invokes = new ConcurrentLinkedQueue<Invoke>();
 
+    /**
+     * branchId 用于快速定位一个branch
+     */
     private String branchId;
 
-    protected Branch(String name, String branchId) {
+    /**
+     * 标志一个starter的开始
+     */
+    private Starter starter;
+
+    /**
+     * 这个branch属于哪个invoke
+     */
+    private Invoke ownerInvoke;
+
+    protected Branch(String name, String branchId, Invoke ownerInvoke) {
         super(name);
+        this.ownerInvoke = ownerInvoke;
         this.branchId = branchId;
-        //TODO 这里要做初始化一个starter,并且初始化starter的开始时间,放到invokes里
+        this.starter = new Starter(name + "-starter");
+        invokes.add(starter);
     }
 
     public void addInvoke(Invoke invoke) {
@@ -39,6 +54,28 @@ public final class Branch extends ArgInvoke {
     }
 
     public String getBranchId() {
-        return branchId;
+        return this.branchId;
+    }
+
+    /**
+     * 给一个branch设置结束点，根据结束点的状态判断整个branch的状态
+     *
+     * @param ender
+     */
+    public void setEnder(Ender ender) {
+        if (super.finished()) {
+            //如果已经结束，不改变原有状态,直接加入之后返回
+            invokes.add(ender);
+            return;
+        }
+        if (ender.isSuccess()) {
+            super.setState(InvokeState.OVER);
+        } else {
+            super.setError(ender.getError());
+            //把拥有者设为失败
+            ownerInvoke.setError(ender.getError());
+        }
+        super.duration = ender.getTimestamp() - this.starter.getStartTime();
+        invokes.add(ender);
     }
 }

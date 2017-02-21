@@ -3,6 +3,8 @@
  */
 package com.ziyuan.perspective;
 
+import com.ziyuan.perspective.util.StorageUtil;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeoutException;
@@ -24,12 +26,12 @@ public abstract class AbstractInvoke implements Invoke {
     /**
      * 一个invoke的持续时间
      */
-    private long duration;
+    protected long duration;
 
     /**
      * 标识自己所在的Branch的Id
      */
-    private String ownerId;
+    private Branch ownerBranch;
 
     /**
      * 这是个全局Id,标识这个invoke属于哪个trace
@@ -44,40 +46,27 @@ public abstract class AbstractInvoke implements Invoke {
     /**
      * 子分支的数量
      */
-    private final AtomicInteger INDEX = new AtomicInteger(0);
+    private final AtomicInteger CHILD_BRANCH_NUM = new AtomicInteger();
+
+    private final AtomicInteger END_BRANCH_NUM = new AtomicInteger();
 
     /**
-     *
+     * 状态
      */
     private InvokeState state;
 
     /**
      * 错误
      */
-    private Throwable t;
+    private Throwable error;
 
     protected AbstractInvoke(String name) {
         this.name = name;
         this.state = InvokeState.TRACING;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public long getDuration() {
-        return this.duration;
-    }
-
-    public InvokeState getState() {
-        return this.state;
-    }
-
-    public Invoke belongsTo() {
-        return null;
-    }
-
-    public Branch newChildBranch(Invoke invoke) {
+    @Override
+    public void newChildBranch(Branch branch) {
         if (CHILD_BRANCHES == null) {
             synchronized (this) {
                 if (CHILD_BRANCHES == null) {
@@ -85,24 +74,33 @@ public abstract class AbstractInvoke implements Invoke {
                 }
             }
         }
-        //TODO 这里还有两步: 1.放入一个新的starter 2.拿出Trace的Invoke num并+1 跟MAX_INVOKE_NODES比较
-        return null;
+        Trace trace = StorageUtil.findTraceById(this.traceId);
+        if (trace.increaseAndGetBranchNum() <= Invoke.MAX_BRANCH_NODES) {
+            CHILD_BRANCHES.add(branch);
+            CHILD_BRANCH_NUM.incrementAndGet();
+        }
     }
 
-    public boolean finish() {
-        return this.state.getValue() <= InvokeState.OVER.getValue();
-    }
-
-    public boolean isSuccess() {
-        return this.state == InvokeState.OVER;
-    }
-
-    public void setError(Throwable t) {
-        this.t = t;
-        if (t instanceof TimeoutException) {
-            this.state = InvokeState.TIMEOUT;
+    @Override
+    public void endOneBranch(String branchId, Ender ender) {
+        Trace trace = StorageUtil.findTraceById(this.traceId);
+        if (trace.finished()) {
+            //trace已经结束了，则不改变状态，只添加
+            return;
+        }
+        Branch branch = trace.getOneBranch(branchId);
+        branch.setEnder(ender);
+        if (this.END_BRANCH_NUM.incrementAndGet() == CHILD_BRANCH_NUM.get()) {
+            //相等，所有子分支结束了,根据这个ender的成功失败给整个trace设置成功失败
+            for (Branch child : this.CHILD_BRANCHES) {
+                if (!child.isSuccess()) {
+                    this.setState(InvokeState.ERROR);
+                    this.setError(child.getError());
+                    break;
+                }
+            }
         } else {
-            this.state = InvokeState.ERROR;
+            //存在没结束的子分支，不改变整个trace的状态
         }
     }
 
@@ -115,4 +113,53 @@ public abstract class AbstractInvoke implements Invoke {
     }
 
     public abstract String format();
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public long getDuration() {
+        return this.duration;
+    }
+
+    @Override
+    public InvokeState getState() {
+        return this.state;
+    }
+
+    @Override
+    public void setState(InvokeState state) {
+        this.state = state;
+    }
+
+    @Override
+    public Branch belongsTo() {
+        return this.ownerBranch;
+    }
+
+    @Override
+    public void setError(Throwable error) {
+        this.error = error;
+        if (error instanceof TimeoutException) {
+            this.state = InvokeState.TIMEOUT;
+        } else {
+            this.state = InvokeState.ERROR;
+        }
+    }
+
+    public Throwable getError() {
+        return error;
+    }
+
+    @Override
+    public boolean finished() {
+        return this.state.getValue() <= InvokeState.OVER.getValue();
+    }
+
+    @Override
+    public boolean isSuccess() {
+        return this.state == InvokeState.OVER;
+    }
 }

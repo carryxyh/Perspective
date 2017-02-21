@@ -11,7 +11,7 @@ package com.ziyuan.perspective;
  */
 public interface Storage {
 
-    Trace getLocalTrace();
+    Trace findTraceById(String traceId);
 
-    Trace getLocalTrace(String traceId);
+    Branch findBranch(String traceId, String branchId);
 }

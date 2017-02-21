@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.storages;
 
+import com.ziyuan.perspective.Branch;
 import com.ziyuan.perspective.Storage;
 import com.ziyuan.perspective.Trace;
 
@@ -10,32 +11,34 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * MemoryStorage
+ * MemoryStorage 内存存储
  *
  * @author ziyuan
  * @since 2017-02-20
  */
 public class MemoryStorage implements Storage {
 
-    private static final ThreadLocal<Trace> LOCAL = new ThreadLocal<Trace>();
+    private Map<String, Trace> storage = new ConcurrentHashMap<String, Trace>(128);
 
-    private static final Map<String, Trace> TRACE_MAP = new ConcurrentHashMap<String, Trace>();
-
-    private static final MemoryStorage memoryStorage = new MemoryStorage();
+    private static final MemoryStorage instance = new MemoryStorage();
 
     private MemoryStorage() {
 
     }
 
     public static MemoryStorage getInstance() {
-        return memoryStorage;
+        return instance;
     }
 
-    public Trace getLocalTrace() {
-        return LOCAL.get();
+    public Trace findTraceById(String traceId) {
+        return storage.get(traceId);
     }
 
-    public Trace getLocalTrace(String traceId) {
-        return TRACE_MAP.get(traceId);
+    public Branch findBranch(String traceId, String branchId) {
+        Trace t = storage.get(traceId);
+        if (t == null) {
+            return null;
+        }
+        return t.getOneBranch(branchId);
     }
 }
