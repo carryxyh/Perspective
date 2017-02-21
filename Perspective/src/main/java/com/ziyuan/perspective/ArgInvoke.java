@@ -16,8 +16,8 @@ public abstract class ArgInvoke extends AbstractInvoke {
      */
     private Object[] args;
 
-    protected ArgInvoke(String name) {
-        super(name);
+    protected ArgInvoke(String name, String traceId) {
+        super(name, traceId);
     }
 
     public Object[] getArgs() {

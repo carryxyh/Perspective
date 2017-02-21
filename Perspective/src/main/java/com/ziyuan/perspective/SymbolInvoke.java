@@ -11,8 +11,8 @@ package com.ziyuan.perspective;
  */
 public abstract class SymbolInvoke extends AbstractInvoke {
 
-    protected SymbolInvoke(String name) {
-        super(name);
+    protected SymbolInvoke(String name, String traceId) {
+        super(name, traceId);
     }
 
     public boolean isStarter() {

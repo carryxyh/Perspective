@@ -15,8 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class Trace extends ArgInvoke {
 
-    private final String traceId;
-
     /**
      * 控制一个trace中，除了starter之外的invokeNode数量，超过这个值认为死循环
      */
@@ -33,8 +31,7 @@ public final class Trace extends ArgInvoke {
     private Map<String, Branch> allBranches = new ConcurrentHashMap<String, Branch>(16);
 
     protected Trace(String name, String traceId) {
-        super(name);
-        this.traceId = traceId;
+        super(name, traceId);
     }
 
     @Override
@@ -50,7 +47,7 @@ public final class Trace extends ArgInvoke {
     }
 
     public String getTraceId() {
-        return this.traceId;
+        return super.getTraceId();
     }
 
     /**

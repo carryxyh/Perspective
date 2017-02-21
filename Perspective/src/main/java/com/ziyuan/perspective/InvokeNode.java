@@ -11,8 +11,8 @@ package com.ziyuan.perspective;
  */
 public class InvokeNode extends AbstractInvoke {
 
-    protected InvokeNode(String name) {
-        super(name);
+    protected InvokeNode(String name, String traceId) {
+        super(name, traceId);
     }
 
     @Override

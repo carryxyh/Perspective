@@ -30,11 +30,11 @@ public final class Branch extends ArgInvoke {
      */
     private Invoke ownerInvoke;
 
-    protected Branch(String name, String branchId, Invoke ownerInvoke) {
-        super(name);
+    protected Branch(String name, String traceId, String branchId, Invoke ownerInvoke) {
+        super(name, traceId);
         this.ownerInvoke = ownerInvoke;
         this.branchId = branchId;
-        this.starter = new Starter(name + "-starter");
+        this.starter = new Starter(name + "-starter", traceId);
         invokes.add(starter);
     }
 

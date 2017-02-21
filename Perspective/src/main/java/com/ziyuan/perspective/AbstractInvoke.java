@@ -60,12 +60,12 @@ public abstract class AbstractInvoke implements Invoke {
      */
     private Throwable error;
 
-    protected AbstractInvoke(String name) {
+    protected AbstractInvoke(String name, String traceId) {
         this.name = name;
         this.state = InvokeState.TRACING;
+        this.traceId = traceId;
     }
 
-    @Override
     public void newChildBranch(Branch branch) {
         if (CHILD_BRANCHES == null) {
             synchronized (this) {
@@ -81,7 +81,6 @@ public abstract class AbstractInvoke implements Invoke {
         }
     }
 
-    @Override
     public void endOneBranch(String branchId, Ender ender) {
         Trace trace = StorageUtil.findTraceById(this.traceId);
         if (trace.finished()) {
@@ -90,17 +89,20 @@ public abstract class AbstractInvoke implements Invoke {
         }
         Branch branch = trace.getOneBranch(branchId);
         branch.setEnder(ender);
-        if (this.END_BRANCH_NUM.incrementAndGet() == CHILD_BRANCH_NUM.get()) {
+        if (this.END_BRANCH_NUM.incrementAndGet() == this.CHILD_BRANCH_NUM.get()) {
             //相等，所有子分支结束了,根据这个ender的成功失败给整个trace设置成功失败
-            for (Branch child : this.CHILD_BRANCHES) {
-                if (!child.isSuccess()) {
-                    this.setState(InvokeState.ERROR);
-                    this.setError(child.getError());
-                    break;
+            new Thread(new Runnable() {
+
+                public void run() {
+                    for (Branch child : CHILD_BRANCHES) {
+                        if (child.finished() && !child.isSuccess()) {
+                            setState(InvokeState.ERROR);
+                            setError(child.getError());
+                            break;
+                        }
+                    }
                 }
-            }
-        } else {
-            //存在没结束的子分支，不改变整个trace的状态
+            }).start();
         }
     }
 
@@ -108,38 +110,28 @@ public abstract class AbstractInvoke implements Invoke {
         return traceId;
     }
 
-    public void setTraceId(String traceId) {
-        this.traceId = traceId;
-    }
-
     public abstract String format();
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public long getDuration() {
         return this.duration;
     }
 
-    @Override
     public InvokeState getState() {
         return this.state;
     }
 
-    @Override
     public void setState(InvokeState state) {
         this.state = state;
     }
 
-    @Override
     public Branch belongsTo() {
         return this.ownerBranch;
     }
 
-    @Override
     public void setError(Throwable error) {
         this.error = error;
         if (error instanceof TimeoutException) {
@@ -153,12 +145,10 @@ public abstract class AbstractInvoke implements Invoke {
         return error;
     }
 
-    @Override
     public boolean finished() {
         return this.state.getValue() <= InvokeState.OVER.getValue();
     }
 
-    @Override
     public boolean isSuccess() {
         return this.state == InvokeState.OVER;
     }

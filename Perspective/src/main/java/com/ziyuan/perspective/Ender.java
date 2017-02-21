@@ -16,8 +16,8 @@ public final class Ender extends SymbolInvoke {
      */
     private long timestamp;
 
-    protected Ender(String name) {
-        super(name);
+    protected Ender(String name, String traceId) {
+        super(name, traceId);
     }
 
     public long getTimestamp() {

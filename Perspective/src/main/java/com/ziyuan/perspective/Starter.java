@@ -16,8 +16,8 @@ public final class Starter extends SymbolInvoke {
      */
     private long timestamp;
 
-    protected Starter(String name) {
-        super(name);
+    protected Starter(String name, String traceId) {
+        super(name, traceId);
         this.timestamp = System.currentTimeMillis();
     }
 
