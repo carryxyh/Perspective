@@ -44,10 +44,10 @@ public final class Trace extends AbstractCollectionInvoke {
             this.setError(ex);
             throw ex;
         }
-        Branch b = allBranches.get(branch.getBranchId());
-        if (b == null) {
+        if (branch != null) {
             allBranches.put(branch.getBranchId(), branch);
             this.increaseAndGetChildBranchNum();
+            this.CHILD_BRANCHES.add(branch);
         }
     }
 

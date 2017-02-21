@@ -28,7 +28,7 @@ public abstract class AbstractCollectionInvoke extends AbstractInvoke {
     /**
      * 默认一个长度的copyOnWrite的List
      */
-    private List<Branch> CHILD_BRANCHES = new CopyOnWriteArrayList<Branch>();
+    protected List<Branch> CHILD_BRANCHES = new CopyOnWriteArrayList<Branch>();
 
     /**
      * 子分支的数量

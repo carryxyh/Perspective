@@ -29,13 +29,10 @@ public final class Branch extends AbstractInvoke {
      */
     private Invoke ownerInvoke;
 
-    private long startTime;
-
     protected Branch(String name, String traceId, String branchId, Invoke ownerInvoke) {
         super(name, traceId);
         this.ownerInvoke = ownerInvoke;
         this.branchId = branchId;
-        this.startTime = System.currentTimeMillis();
     }
 
     public void addInvoke(Invoke invoke) throws Exception {
@@ -75,7 +72,7 @@ public final class Branch extends AbstractInvoke {
      */
     public void addEnder(Ender ender) {
         //设置结束时间
-        this.setDuration(ender.getTimestamp() - this.startTime);
+        this.setDuration(ender.getTimestamp() - this.getStartTime());
 
         try {
             this.addInvoke(ender);
