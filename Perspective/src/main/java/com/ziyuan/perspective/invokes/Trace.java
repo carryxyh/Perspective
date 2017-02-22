@@ -74,25 +74,25 @@ public final class Trace extends AbstractCollectionInvoke {
             return;
         }
         if (this.finished()) {
+            if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
+                StorageUtil.endOneTrace(this);
+            }
             return;
         }
 
         if (ender.isSuccess()) {
-            //成功，如果所有子branch都结束了，则结束这个branch
-            if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
-                //todo 这里根据超时时间来判断，状态应该设置为超时还是正常结束
-                this.setDuration(ender.getTimestamp() - this.getStartTime());
-                this.setState(InvokeState.OVER);
-                StorageUtil.endOneTrace(this);
-            }
+            //todo 这里根据超时时间来判断，状态应该设置为超时还是正常结束
+            this.setDuration(ender.getTimestamp() - this.getStartTime());
+            this.setState(InvokeState.OVER);
         } else {
             //不成功，直接结束一个trace
             this.setError(ender.getError());
             this.setState(ender.getState());
             this.errorBranches.add(b);
-            this.increaseAndGetEndBranchNum();
             //todo
             this.setDuration(ender.getTimestamp() - this.getStartTime());
+        }
+        if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
             StorageUtil.endOneTrace(this);
         }
         b.addEnder(ender);

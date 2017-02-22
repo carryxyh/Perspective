@@ -41,13 +41,23 @@ public class InvokeTest extends TestCase {
         Thread.sleep(100);
 
         /*--------------------------到这里第二层结束----------------------------*/
-        trace.endOneBranch(mainWId, new Ender("weixin-meal 中的方法 over", trace.getTraceId(), mainWId));
+        Ender ender = new Ender("weixin-meal 中的一个方法 over", trace.getTraceId(), mainWId);
+//        ender.setError(new NullPointerException("空指针异常"));
+        trace.endOneBranch(mainWId, ender);
 
         /*--------------------------到这里第一层结束----------------------------*/
         trace.endOneBranch(mainWId, new Ender("weixin-meal over", trace.getTraceId(), mainT.getBranchId()));
 
         System.out.println("trace 追踪之后，状态为 ：" + trace.getState());
         System.out.println("trace 用时 : " + trace.getDuration() + "ms");
+
+        if (trace.getErrorBranch().size() > 0) {
+            for (Branch branch : trace.getErrorBranch()) {
+                System.out.println("有问题的 branch 为 : " + branch.getName() + " 存在的异常为 : " + branch.getError());
+            }
+        } else {
+            System.out.println("整个链路没有问题！");
+        }
 
         System.out.println("经过存储策略筛选过后，剩下的 ： " + StorageUtil.getStorage().getTracing().size());
     }
