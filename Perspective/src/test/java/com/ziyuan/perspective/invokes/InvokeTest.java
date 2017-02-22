@@ -5,6 +5,7 @@ package com.ziyuan.perspective.invokes;
 
 import com.ziyuan.perspective.LocalTraceManager;
 import com.ziyuan.perspective.SymbolFactory;
+import com.ziyuan.perspective.util.StorageUtil;
 import junit.framework.TestCase;
 
 /**
@@ -34,15 +35,21 @@ public class InvokeTest extends TestCase {
 
         String mainWId = mainW.getBranchId();
 
+        System.out.println("未经过存储策略筛选过后，剩下的 ： " + StorageUtil.getStorage().getTracing().size());
+
+        //模拟方法调用耗时
+        Thread.sleep(100);
+
         /*--------------------------到这里第二层结束----------------------------*/
         trace.endOneBranch(mainWId, new Ender("weixin-meal 中的方法 over", trace.getTraceId(), mainWId));
 
         /*--------------------------到这里第一层结束----------------------------*/
         trace.endOneBranch(mainWId, new Ender("weixin-meal over", trace.getTraceId(), mainT.getBranchId()));
 
-        System.out.println(trace.getState());
-        System.out.println(trace.getDuration());
-        System.out.println(trace.isSuccess());
+        System.out.println("trace 追踪之后，状态为 ：" + trace.getState());
+        System.out.println("trace 用时 : " + trace.getDuration() + "ms");
+
+        System.out.println("经过存储策略筛选过后，剩下的 ： " + StorageUtil.getStorage().getTracing().size());
     }
 
     public void consumerSOA(String traceId, String branchId) {

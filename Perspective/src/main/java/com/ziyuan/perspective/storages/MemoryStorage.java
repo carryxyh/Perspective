@@ -58,6 +58,7 @@ public class MemoryStorage implements Storage {
         if (StrategyUtil.filterStorage(trace)) {
             overTraces.add(trace);
         }
+        System.out.println("结束之后的tracing中的数量 ： " + tracing.size());
     }
 
     public void newTrace(Trace trace) {
