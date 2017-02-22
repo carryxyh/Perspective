@@ -31,6 +31,7 @@ public class InvokeNode extends AbstractCollectionInvoke {
 
         super.CHILD_BRANCHES.add(b);
         this.ownerBranchId = ownerBranchId;
+        t.increaseAndGetChildBranchNum();
     }
 
     @Override

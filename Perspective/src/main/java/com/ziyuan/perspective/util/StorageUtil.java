@@ -3,10 +3,10 @@
  */
 package com.ziyuan.perspective.util;
 
-import com.ziyuan.perspective.storages.Storage;
 import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.storages.MemoryStorage;
+import com.ziyuan.perspective.storages.Storage;
 
 /**
  * StorageUtil storage的工具类，主要也是用来其他组件和storage的解耦
@@ -42,8 +42,23 @@ public final class StorageUtil {
         return proxy.findBranch(traceId, branchId);
     }
 
+    /**
+     * 结束一次追踪
+     *
+     * @param trace trace
+     */
     public static void endOneTrace(Trace trace) {
+        if (trace == null) {
+            return;
+        }
         proxy.endOneTrace(trace);
+    }
+
+    public static void newTrace(Trace trace) {
+        if (trace == null) {
+            return;
+        }
+        proxy.newTrace(trace);
     }
 
     /**

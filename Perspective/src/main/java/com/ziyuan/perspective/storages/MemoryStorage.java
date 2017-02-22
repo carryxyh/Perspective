@@ -53,14 +53,15 @@ public class MemoryStorage implements Storage {
     }
 
     public void endOneTrace(Trace trace) {
-        if (trace == null) {
-            return;
-        }
         tracing.remove(trace.getTraceId());
         //这里需要用到策略，来控制什么样的trace需要放入到overTraces中
         if (StrategyUtil.filterStorage(trace)) {
             overTraces.add(trace);
         }
+    }
+
+    public void newTrace(Trace trace) {
+        tracing.put(trace.getTraceId(), trace);
     }
 
     public ArrayList<Trace> getTracing() {

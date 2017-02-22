@@ -9,16 +9,27 @@ package com.ziyuan.perspective.invokes;
  * @author ziyuan
  * @since 2017-02-20
  */
-public final class Ender extends InvokeNode {
+public final class Ender extends AbstractInvoke {
 
     /**
      * 一个branch的结束时间
      */
     private long endTime;
 
+    private String ownerBranchId;
+
     protected Ender(String name, String traceId, String ownerBranchId) {
-        super(name, traceId, ownerBranchId);
+        super(name, traceId);
         endTime = System.currentTimeMillis();
+        //默认的ender就是正常结束的
+        this.setState(InvokeState.OVER);
+        this.ownerBranchId = ownerBranchId;
+    }
+
+    @Override
+    public void setError(Throwable error) {
+        super.setError(error);
+        this.setState(InvokeState.ERROR);
     }
 
     public long getTimestamp() {

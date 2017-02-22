@@ -34,6 +34,7 @@ public final class Trace extends AbstractCollectionInvoke {
         Branch b = new Branch(name + "-main", traceId, branchId, this);
         super.CHILD_BRANCHES.add(b);
         this.allBranches.put(branchId, b);
+        StorageUtil.newTrace(this);
     }
 
     public void newChildBranch(Branch branch) throws Exception {
@@ -72,7 +73,7 @@ public final class Trace extends AbstractCollectionInvoke {
         if (b == null) {
             return;
         }
-        if (b.finished()) {
+        if (this.finished()) {
             return;
         }
 
@@ -80,7 +81,7 @@ public final class Trace extends AbstractCollectionInvoke {
             //成功，如果所有子branch都结束了，则结束这个branch
             if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
                 //todo 这里根据超时时间来判断，状态应该设置为超时还是正常结束
-                this.setDuration(this.getStartTime() - ender.getTimestamp());
+                this.setDuration(ender.getTimestamp() - this.getStartTime());
                 this.setState(InvokeState.OVER);
                 StorageUtil.endOneTrace(this);
             }
@@ -91,7 +92,7 @@ public final class Trace extends AbstractCollectionInvoke {
             this.errorBranches.add(b);
             this.increaseAndGetEndBranchNum();
             //todo
-            this.setDuration(this.getStartTime() - ender.getTimestamp());
+            this.setDuration(ender.getTimestamp() - this.getStartTime());
             StorageUtil.endOneTrace(this);
         }
         b.addEnder(ender);

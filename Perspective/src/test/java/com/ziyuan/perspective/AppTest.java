@@ -4,6 +4,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Unit test for simple App.
  */
@@ -35,5 +37,9 @@ public class AppTest
     {
 //        assertTrue( true );
         System.out.println(Integer.MAX_VALUE >> 15);
+        AtomicInteger ai = new AtomicInteger(0);
+        ai.incrementAndGet();
+        ai.incrementAndGet();
+        System.out.println(ai.get());
     }
 }

@@ -46,6 +46,9 @@ public final class Branch extends AbstractInvoke {
         if (trace.increaseAndGetInvokeNum() > Invoke.MAX_INVOKE_NODES) {
             throw new InvokeNumsException();
         }
+        if (invoke instanceof Branch) {
+            trace.putBranch((Branch) invoke);
+        }
         this.invokes.add(invoke);
     }
 

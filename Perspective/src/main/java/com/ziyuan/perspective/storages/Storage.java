@@ -41,6 +41,13 @@ public interface Storage {
     void endOneTrace(Trace trace);
 
     /**
+     * 开始一个trace
+     *
+     * @param trace 放入的trace
+     */
+    void newTrace(Trace trace);
+
+    /**
      * 获取所有trace的集合
      *
      * @return 所有tracing状态的trace集合

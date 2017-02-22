@@ -56,7 +56,7 @@ public abstract class AbstractInvoke implements Invoke {
     public abstract String format();
 
     public boolean finished() {
-        return this.state.getValue() <= InvokeState.OVER.getValue();
+        return this.state.getValue() >= InvokeState.OVER.getValue();
     }
 
     public boolean isSuccess() {
