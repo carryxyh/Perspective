@@ -1,7 +1,9 @@
 /*
  * Copyright (C) 2009-2016 Hangzhou 2Dfire Technology Co., Ltd. All rights reserved
  */
-package com.ziyuan.perspective;
+package com.ziyuan.perspective.invokes;
+
+import com.ziyuan.perspective.Formatable;
 
 import java.io.Serializable;
 

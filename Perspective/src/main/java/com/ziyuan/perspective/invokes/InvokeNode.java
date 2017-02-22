@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2009-2016 Hangzhou 2Dfire Technology Co., Ltd. All rights reserved
  */
-package com.ziyuan.perspective;
+package com.ziyuan.perspective.invokes;
 
 /**
  * InvokeNode TODO ignore 暂时在每个调用节点上不记录参数

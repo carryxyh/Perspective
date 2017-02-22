@@ -1,7 +1,9 @@
 /*
  * Copyright (C) 2009-2016 Hangzhou 2Dfire Technology Co., Ltd. All rights reserved
  */
-package com.ziyuan.perspective;
+package com.ziyuan.perspective.invokes;
+
+import com.ziyuan.perspective.util.StorageUtil;
 
 import java.util.Map;
 import java.util.Set;
@@ -41,10 +43,6 @@ public final class Trace extends AbstractCollectionInvoke {
         return null;
     }
 
-    public String getTraceId() {
-        return super.getTraceId();
-    }
-
     public Branch getOneBranch(String branchId) {
         return allBranches.get(branchId);
     }
@@ -68,17 +66,21 @@ public final class Trace extends AbstractCollectionInvoke {
             return;
         }
 
-        if (!ender.isSuccess()) {
+        if (ender.isSuccess()) {
+            //成功，如果所有子branch都结束了，则结束这个branch
+            if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
+                this.setState(InvokeState.OVER);
+                this.setDuration(this.getStartTime() - ender.getTimestamp());
+                StorageUtil.endOneTrace(this);
+            }
+        } else {
+            //不成功，直接结束一个trace
             this.setError(ender.getError());
             this.setState(ender.getState());
             this.errorBranches.add(b);
             this.increaseAndGetEndBranchNum();
             this.setDuration(this.getStartTime() - ender.getTimestamp());
-        } else {
-            if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
-                this.setState(InvokeState.OVER);
-                this.setDuration(this.getStartTime() - ender.getTimestamp());
-            }
+            StorageUtil.endOneTrace(this);
         }
         b.addEnder(ender);
     }

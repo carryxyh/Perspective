@@ -4,6 +4,7 @@
 package com.ziyuan.perspective;
 
 import com.ziyuan.perspective.Exception.LocalTraceManagerClosedException;
+import com.ziyuan.perspective.invokes.Trace;
 
 /**
  * LocalTraceManager threadLocal管理器，单例
