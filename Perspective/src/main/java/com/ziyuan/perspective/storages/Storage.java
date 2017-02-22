@@ -45,7 +45,7 @@ public interface Storage {
      *
      * @return 所有tracing状态的trace集合
      */
-    ArrayList<Trace> getAllTraces();
+    ArrayList<Trace> getTracing();
 
     /**
      * 清理storage

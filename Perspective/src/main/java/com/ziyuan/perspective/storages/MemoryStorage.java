@@ -24,7 +24,7 @@ public class MemoryStorage implements Storage {
     /**
      * 所有Trace的集合，包括正在进行的和结束的
      */
-    private final Map<String, Trace> allTraces = new ConcurrentHashMap<String, Trace>(128);
+    private final Map<String, Trace> tracing = new ConcurrentHashMap<String, Trace>(128);
 
     /**
      * 所有结束的trace集合
@@ -32,11 +32,11 @@ public class MemoryStorage implements Storage {
     private final List<Trace> overTraces = new CopyOnWriteArrayList<Trace>();
 
     public Trace findTraceById(String traceId) {
-        return allTraces.get(traceId);
+        return tracing.get(traceId);
     }
 
     public Branch findBranch(String traceId, String branchId) {
-        Trace t = allTraces.get(traceId);
+        Trace t = tracing.get(traceId);
         if (t == null) {
             return null;
         }
@@ -56,19 +56,19 @@ public class MemoryStorage implements Storage {
         if (trace == null) {
             return;
         }
-        allTraces.remove(trace.getTraceId());
+        tracing.remove(trace.getTraceId());
         //这里需要用到策略，来控制什么样的trace需要放入到overTraces中
         if (StrategyUtil.filterStorage(trace)) {
             overTraces.add(trace);
         }
     }
 
-    public ArrayList<Trace> getAllTraces() {
-        return new ArrayList<Trace>(allTraces.values());
+    public ArrayList<Trace> getTracing() {
+        return new ArrayList<Trace>(tracing.values());
     }
 
     public void clear() {
-        allTraces.clear();
+        tracing.clear();
         overTraces.clear();
     }
 

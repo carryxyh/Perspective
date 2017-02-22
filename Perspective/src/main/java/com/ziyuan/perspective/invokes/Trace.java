@@ -69,8 +69,9 @@ public final class Trace extends AbstractCollectionInvoke {
         if (ender.isSuccess()) {
             //成功，如果所有子branch都结束了，则结束这个branch
             if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
-                this.setState(InvokeState.OVER);
+                //todo 这里根据超时时间来判断，状态应该设置为超时还是正常结束
                 this.setDuration(this.getStartTime() - ender.getTimestamp());
+                this.setState(InvokeState.OVER);
                 StorageUtil.endOneTrace(this);
             }
         } else {
@@ -79,6 +80,7 @@ public final class Trace extends AbstractCollectionInvoke {
             this.setState(ender.getState());
             this.errorBranches.add(b);
             this.increaseAndGetEndBranchNum();
+            //todo
             this.setDuration(this.getStartTime() - ender.getTimestamp());
             StorageUtil.endOneTrace(this);
         }

@@ -96,6 +96,9 @@ public interface Invoke extends Serializable, Formatable {
      */
     Object[] getArgs();
 
+    /**
+     * invoke 状态的枚举
+     */
     enum InvokeState {
 
         /**
