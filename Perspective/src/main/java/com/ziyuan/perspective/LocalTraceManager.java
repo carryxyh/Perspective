@@ -8,24 +8,17 @@ import com.ziyuan.perspective.invokes.Trace;
 
 /**
  * LocalTraceManager threadLocal管理器，单例
+ * 考虑废弃掉,统一放到storage处理
  *
  * @author ziyuan
  * @since 2017-02-21
  */
+@Deprecated
 public final class LocalTraceManager {
 
     private volatile boolean isClosed;
 
     private ThreadLocal<Trace> LOCAL_MANAGER = new ThreadLocal<Trace>();
-
-    private LocalTraceManager() {
-    }
-
-    private static final LocalTraceManager localTraceManager = new LocalTraceManager();
-
-    public LocalTraceManager getInstance() {
-        return localTraceManager;
-    }
 
     public Trace get() throws Exception {
         if (isClosed) {
@@ -34,6 +27,11 @@ public final class LocalTraceManager {
         return LOCAL_MANAGER.get();
     }
 
+    /**
+     * api层调用结束之后需要remove掉
+     *
+     * @throws Exception
+     */
     public void remove() throws Exception {
         if (isClosed) {
             throw new LocalTraceManagerClosedException();
@@ -55,5 +53,17 @@ public final class LocalTraceManager {
         isClosed = true;
         //help gc
         LOCAL_MANAGER = null;
+    }
+
+    /**
+     * 单例
+     */
+    private LocalTraceManager() {
+    }
+
+    private static final LocalTraceManager localTraceManager = new LocalTraceManager();
+
+    public LocalTraceManager getInstance() {
+        return localTraceManager;
     }
 }

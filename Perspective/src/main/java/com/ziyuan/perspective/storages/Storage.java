@@ -6,6 +6,8 @@ package com.ziyuan.perspective.storages;
 import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Trace;
 
+import java.util.ArrayList;
+
 /**
  * Storage 存储中心,必须单例
  *
@@ -37,4 +39,16 @@ public interface Storage {
      * @param trace 结束了要被处理的trace
      */
     void endOneTrace(Trace trace);
+
+    /**
+     * 获取所有trace的集合
+     *
+     * @return 所有tracing状态的trace集合
+     */
+    ArrayList<Trace> getAllTraces();
+
+    /**
+     * 清理storage
+     */
+    void clear();
 }
