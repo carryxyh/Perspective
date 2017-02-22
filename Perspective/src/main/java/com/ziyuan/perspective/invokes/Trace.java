@@ -75,6 +75,7 @@ public final class Trace extends AbstractCollectionInvoke {
         }
         if (this.finished()) {
             if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
+                //todo 这里判断如果ender错误，把这个branch同样放入到errorBranches中。如果成功，判断超时，超时也放入到errorBranches中
                 StorageUtil.endOneTrace(this);
             }
             return;
