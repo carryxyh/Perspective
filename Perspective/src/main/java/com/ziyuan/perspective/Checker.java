@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective;
 
+import com.ziyuan.perspective.storages.Storage;
 import com.ziyuan.perspective.util.StorageUtil;
 
 /**
