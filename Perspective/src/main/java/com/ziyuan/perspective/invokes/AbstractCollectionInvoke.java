@@ -44,8 +44,6 @@ public abstract class AbstractCollectionInvoke extends AbstractInvoke {
 
     protected AbstractCollectionInvoke(String name, String traceId) {
         super(name, traceId);
-        Branch b = new Branch(name + "-main", traceId, traceId + "-" + CHILD_BRANCH_NUM.incrementAndGet(), this);
-        CHILD_BRANCHES.add(b);
     }
 
     public void newChildBranch(Branch branch) throws Exception {

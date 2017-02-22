@@ -3,6 +3,8 @@
  */
 package com.ziyuan.perspective.invokes;
 
+import com.ziyuan.perspective.util.StorageUtil;
+
 /**
  * InvokeNode TODO ignore 暂时在每个调用节点上不记录参数
  *
@@ -18,6 +20,16 @@ public class InvokeNode extends AbstractCollectionInvoke {
 
     protected InvokeNode(String name, String traceId, String ownerBranchId) {
         super(name, traceId);
+
+        //每一个node都有一个主branch
+        String branchId = traceId + "-" + this.increaseAndGetChildBranchNum();
+        Branch b = new Branch(name + "-main", traceId, branchId, this);
+
+        //放到trace中方便查找
+        Trace t = StorageUtil.findTraceById(this.getTraceId());
+        t.putBranch(b);
+
+        super.CHILD_BRANCHES.add(b);
         this.ownerBranchId = ownerBranchId;
     }
 

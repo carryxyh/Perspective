@@ -30,6 +30,10 @@ public final class Trace extends AbstractCollectionInvoke {
 
     protected Trace(String name, String traceId) {
         super(name, traceId);
+        String branchId = traceId + "-" + this.increaseAndGetChildBranchNum();
+        Branch b = new Branch(name + "-main", traceId, branchId, this);
+        super.CHILD_BRANCHES.add(b);
+        this.allBranches.put(branchId, b);
     }
 
     public void newChildBranch(Branch branch) throws Exception {
@@ -45,6 +49,12 @@ public final class Trace extends AbstractCollectionInvoke {
 
     public Branch getOneBranch(String branchId) {
         return allBranches.get(branchId);
+    }
+
+    public void putBranch(Branch branch) {
+        if (branch != null) {
+            allBranches.put(branch.getBranchId(), branch);
+        }
     }
 
     public Set<Branch> getErrorBranch() {
