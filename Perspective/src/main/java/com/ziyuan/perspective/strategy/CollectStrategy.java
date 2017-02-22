@@ -9,5 +9,5 @@ package com.ziyuan.perspective.strategy;
  * @author ziyuan
  * @since 2017-02-22
  */
-public interface CollectStrategy {
+public interface CollectStrategy extends Strategy {
 }

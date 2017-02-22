@@ -11,7 +11,7 @@ import com.ziyuan.perspective.invokes.Trace;
  * @author ziyuan
  * @since 2017-02-22
  */
-public interface StorageStrategy {
+public interface StorageStrategy extends Strategy {
 
     /**
      * 存储一个trace，如果返回true，存，false不存

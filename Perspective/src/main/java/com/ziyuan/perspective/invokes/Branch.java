@@ -69,7 +69,7 @@ public final class Branch extends AbstractInvoke {
     }
 
     /**
-     * 添加一个Ender，结束这个branch
+     * 添加一个Ender，结束这个branch，这个方法调用方只能是trace！！！
      *
      * @param ender
      */
