@@ -3,6 +3,8 @@
  */
 package com.ziyuan.perspective;
 
+import com.ziyuan.perspective.Exception.InvokeNumsException;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,13 +37,34 @@ public abstract class AbstractCollectionInvoke extends AbstractInvoke {
      */
     private final AtomicInteger CHILD_BRANCH_NUM = new AtomicInteger();
 
+    /**
+     * 结束的子分支数量
+     */
     private final AtomicInteger END_BRANCH_NUM = new AtomicInteger();
 
     protected AbstractCollectionInvoke(String name, String traceId) {
         super(name, traceId);
+        Branch b = new Branch(name + "-main", traceId, traceId + "-" + CHILD_BRANCH_NUM.incrementAndGet(), this);
+        CHILD_BRANCHES.add(b);
     }
 
-    public abstract void newChildBranch(Branch branch) throws Exception;
+    public void newChildBranch(Branch branch) throws Exception {
+        if (this.finished()) {
+            throw new IllegalStateException("Trace has finished !");
+        }
+
+        //如果一个trace中的branch数量超过了上限，抛异常并结束这个Trace
+        if (Invoke.MAX_BRANCH_NODES < this.increaseAndGetBranchNum()) {
+            Exception ex = new InvokeNumsException();
+            this.setState(InvokeState.ERROR);
+            this.setError(ex);
+            throw ex;
+        }
+        if (branch != null) {
+            this.increaseAndGetChildBranchNum();
+            this.CHILD_BRANCHES.add(branch);
+        }
+    }
 
     public int increaseAndGetInvokeNum() {
         return this.invokeNodeNum.incrementAndGet();
@@ -55,7 +78,7 @@ public abstract class AbstractCollectionInvoke extends AbstractInvoke {
         return CHILD_BRANCH_NUM.incrementAndGet();
     }
 
-    public int getChildBranchNum(){
+    public int getChildBranchNum() {
         return CHILD_BRANCH_NUM.get();
     }
 

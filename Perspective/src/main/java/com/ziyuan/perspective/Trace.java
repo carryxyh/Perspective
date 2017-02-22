@@ -3,8 +3,6 @@
  */
 package com.ziyuan.perspective;
 
-import com.ziyuan.perspective.Exception.InvokeNumsException;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,22 +31,8 @@ public final class Trace extends AbstractCollectionInvoke {
     }
 
     public void newChildBranch(Branch branch) throws Exception {
-        if (this.finished()) {
-            throw new IllegalStateException("Trace has finished !");
-        }
-
-        //如果一个trace中的branch数量超过了上限，抛异常并结束这个Trace
-        if (Invoke.MAX_BRANCH_NODES < this.increaseAndGetBranchNum()) {
-            Exception ex = new InvokeNumsException();
-            this.setState(InvokeState.ERROR);
-            this.setError(ex);
-            throw ex;
-        }
-        if (branch != null) {
-            allBranches.put(branch.getBranchId(), branch);
-            this.increaseAndGetChildBranchNum();
-            this.CHILD_BRANCHES.add(branch);
-        }
+        super.newChildBranch(branch);
+        allBranches.put(branch.getBranchId(), branch);
     }
 
     @Override

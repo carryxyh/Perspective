@@ -21,10 +21,6 @@ public class InvokeNode extends AbstractCollectionInvoke {
         this.ownerBranchId = ownerBranchId;
     }
 
-    public void newChildBranch(Branch branch) throws Exception {
-
-    }
-
     @Override
     public String format() {
         return null;
@@ -32,5 +28,10 @@ public class InvokeNode extends AbstractCollectionInvoke {
 
     public String getOwnerBranchId() {
         return ownerBranchId;
+    }
+
+    @Override
+    public void setArgs(Object... obj) {
+        //这里现在默认不记录参数
     }
 }

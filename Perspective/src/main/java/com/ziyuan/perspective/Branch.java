@@ -17,6 +17,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public final class Branch extends AbstractInvoke {
 
+    /**
+     * 这里允许放入InvokeNode和Branch
+     */
     private final ConcurrentLinkedQueue<Invoke> invokes = new ConcurrentLinkedQueue<Invoke>();
 
     /**
