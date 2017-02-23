@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.collectors;
 
+import com.ziyuan.perspective.Constants;
 import com.ziyuan.perspective.Formatable;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.storages.Storage;
@@ -54,7 +55,7 @@ public final class MemoryCollector implements Collector {
                     }
                 }
             }
-        }, 1, 180, TimeUnit.SECONDS);
+        }, 1, Constants.COLLECT_PERIOD, TimeUnit.SECONDS);
     }
 
     public List<Trace> fetch() {

@@ -32,7 +32,7 @@ public final class Branch extends AbstractInvoke {
      */
     private Invoke ownerInvoke;
 
-    public Branch(String name, String traceId, String branchId, AbstractCollectionInvoke ownerInvoke) {
+    public Branch(String name, String traceId, String branchId, Invoke ownerInvoke) {
         super(name, traceId);
         this.ownerInvoke = ownerInvoke;
         this.branchId = branchId;

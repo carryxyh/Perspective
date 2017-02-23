@@ -16,4 +16,9 @@ public final class Constants {
      */
     public static final long TIME_OUT = 2000;
 
+    /**
+     * 收集器每隔多长时间收集一次
+     */
+    public static final int COLLECT_PERIOD = 180;
+
 }
