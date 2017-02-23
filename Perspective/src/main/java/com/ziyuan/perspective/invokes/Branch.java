@@ -75,6 +75,11 @@ public final class Branch extends AbstractInvoke {
         return branchId;
     }
 
+    /**
+     * 获取该branch的owner
+     *
+     * @return owner
+     */
     public Invoke getOwnerInvoke() {
         return ownerInvoke;
     }
