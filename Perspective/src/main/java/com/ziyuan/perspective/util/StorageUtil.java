@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.util;
 
+import com.ziyuan.perspective.Exception.SymbolIdEmptyException;
 import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.storages.MemoryStorage;
@@ -39,7 +40,12 @@ public final class StorageUtil {
      * @return branch
      */
     public static Branch findBranch(String traceId, String branchId) {
-        return proxy.findBranch(traceId, branchId);
+        try {
+            return proxy.findBranch(traceId, branchId);
+        } catch (SymbolIdEmptyException e) {
+            //todo 记录一下日志
+            return null;
+        }
     }
 
     /**

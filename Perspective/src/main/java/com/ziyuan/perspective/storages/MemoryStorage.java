@@ -3,9 +3,11 @@
  */
 package com.ziyuan.perspective.storages;
 
+import com.ziyuan.perspective.Exception.SymbolIdEmptyException;
 import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.util.StrategyUtil;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,10 @@ public class MemoryStorage implements Storage {
         return tracing.get(traceId);
     }
 
-    public Branch findBranch(String traceId, String branchId) {
+    public Branch findBranch(String traceId, String branchId) throws SymbolIdEmptyException {
+        if (StringUtils.isBlank(traceId) || StringUtils.isBlank(branchId)) {
+            throw new SymbolIdEmptyException();
+        }
         Trace t = tracing.get(traceId);
         if (t == null) {
             return null;

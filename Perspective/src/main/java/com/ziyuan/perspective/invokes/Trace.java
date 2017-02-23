@@ -44,8 +44,13 @@ public final class Trace extends AbstractCollectionInvoke {
 
     @Override
     public String format() {
-        //todo
-        return null;
+        StringBuffer sb = new StringBuffer("");
+        if (this.isSuccess()) {
+            //成功的
+        } else {
+            //失败的
+        }
+        return sb.toString();
     }
 
     public Branch getOneBranch(String branchId) {

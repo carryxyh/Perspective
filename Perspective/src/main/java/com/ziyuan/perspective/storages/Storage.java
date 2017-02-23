@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.storages;
 
+import com.ziyuan.perspective.Exception.SymbolIdEmptyException;
 import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Trace;
 
@@ -31,7 +32,7 @@ public interface Storage {
      * @param branchId branchId
      * @return branch
      */
-    Branch findBranch(String traceId, String branchId);
+    Branch findBranch(String traceId, String branchId) throws SymbolIdEmptyException;
 
     /**
      * 结束一个trace
