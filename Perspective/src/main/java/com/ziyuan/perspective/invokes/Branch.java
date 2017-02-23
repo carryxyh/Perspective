@@ -23,7 +23,7 @@ public final class Branch extends AbstractInvoke {
     private final ConcurrentLinkedQueue<Invoke> invokes = new ConcurrentLinkedQueue<Invoke>();
 
     /**
-     * branchId 用于快速定位一个branch
+     * branchId 用于快速定位一个branch,一个branchId在Trace中必须唯一
      */
     private String branchId;
 
