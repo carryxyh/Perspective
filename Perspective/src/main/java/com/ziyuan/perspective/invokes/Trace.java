@@ -84,6 +84,7 @@ public final class Trace extends AbstractCollectionInvoke {
         if (b == null) {
             return;
         }
+        b.addEnder(ender);
         if (this.finished()) {
             if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
                 if (!ender.isSuccess()) {
@@ -120,6 +121,5 @@ public final class Trace extends AbstractCollectionInvoke {
         if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
             StorageUtil.endOneTrace(this);
         }
-        b.addEnder(ender);
     }
 }

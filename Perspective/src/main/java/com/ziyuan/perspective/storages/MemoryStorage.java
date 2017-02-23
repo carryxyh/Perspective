@@ -64,6 +64,7 @@ public class MemoryStorage implements Storage {
             overTraces.add(trace);
         }
         System.out.println("结束之后的tracing中的数量 ： " + tracing.size());
+        System.out.println("overTraces 中tracing的数量 : " + overTraces.size());
     }
 
     public void newTrace(Trace trace) {

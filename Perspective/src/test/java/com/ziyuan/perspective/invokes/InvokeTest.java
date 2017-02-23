@@ -62,6 +62,45 @@ public class InvokeTest extends TestCase {
         System.out.println("经过存储策略筛选过后，剩下的 ： " + StorageUtil.getStorage().getTracing().size());
     }
 
+    public void testMoreInfo() throws Exception {
+        LocalTraceManager localTraceManager = LocalTraceManager.getInstance();
+        Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
+        localTraceManager.add(trace);
+
+        /*-------------------到这里第一层开始-----------------------------*/
+
+        //weixin-meal main
+        Branch mainT = trace.getMainBranch();
+        Branch consumerB = new Branch("consumer - soa", localTraceManager.get().getTraceId(), localTraceManager.get().getTraceId() + "-2", mainT);
+        mainT.addInvoke(consumerB);
+
+        /*-------------------到这里第二层开始-----------------------------*/
+
+        //模拟方法调用耗时
+        Thread.sleep(100);
+
+        Ender enderConsumer = new Ender("consumer - soa over", trace.getTraceId(), consumerB.getBranchId());
+//        enderConsumer.setError(new NullPointerException("空指针！"));
+        trace.endOneBranch(consumerB.getBranchId(), enderConsumer);
+
+        /*--------------------------到这里第一层结束----------------------------*/
+
+        Ender enderWX = new Ender("weixin - meal over", trace.getTraceId(), mainT.getBranchId());
+//        enderWX.setError(new IllegalStateException("状态异常！"));
+        trace.endOneBranch(mainT.getBranchId(), enderWX);
+
+        System.out.println("trace 追踪之后，状态为 ：" + trace.getState());
+        System.out.println("trace 用时 : " + trace.getDuration() + "ms");
+
+        if (trace.getErrorBranch().size() > 0) {
+            System.out.println(trace.format());
+        } else {
+            System.out.println("整个链路没有问题！");
+        }
+
+        System.out.println("经过存储策略筛选过后，剩下的 ： " + StorageUtil.getStorage().getTracing().size());
+    }
+
     public void consumerSOA(String traceId, String branchId) {
 
     }

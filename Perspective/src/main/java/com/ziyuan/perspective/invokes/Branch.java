@@ -48,6 +48,7 @@ public final class Branch extends AbstractInvoke {
         }
         if (invoke instanceof Branch) {
             trace.putBranch((Branch) invoke);
+            trace.increaseAndGetChildBranchNum();
         }
         this.invokes.add(invoke);
     }
