@@ -3,7 +3,7 @@
  */
 package com.ziyuan.perspective.collectors;
 
-import com.ziyuan.perspective.Formatable;
+import com.ziyuan.perspective.invokes.Trace;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,14 +21,14 @@ public interface Collector extends Serializable {
      *
      * @return
      */
-    List<Formatable> fetch();
+    List<Trace> fetch();
 
     /**
      * storage 主动送过来
      *
      * @param formatables
      */
-    void receive(List<Formatable> formatables);
+    void receive(List<Trace> formatables);
 
     /**
      * 开始手机

@@ -4,6 +4,8 @@
 package com.ziyuan.perspective.util;
 
 import com.ziyuan.perspective.invokes.Trace;
+import com.ziyuan.perspective.strategy.CollectStrategy;
+import com.ziyuan.perspective.strategy.ErrorCollectStrategy;
 import com.ziyuan.perspective.strategy.ErrorStorageStrategy;
 import com.ziyuan.perspective.strategy.StorageStrategy;
 
@@ -21,6 +23,11 @@ public final class StrategyUtil {
     public static StorageStrategy storageStrategy = new ErrorStorageStrategy();
 
     /**
+     * 收集策略
+     */
+    public static CollectStrategy collectStrategy = new ErrorCollectStrategy();
+
+    /**
      * 过滤一个需要存储的trace
      *
      * @param trace trace
@@ -28,5 +35,15 @@ public final class StrategyUtil {
      */
     public static boolean filterStorage(Trace trace) {
         return storageStrategy.storeTrace(trace);
+    }
+
+    /**
+     * 过滤一个需要收集的trace
+     *
+     * @param trace trace
+     * @return 是否需要收集
+     */
+    public static boolean filterCollect(Trace trace) {
+        return collectStrategy.collectTrace(trace);
     }
 }

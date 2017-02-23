@@ -6,18 +6,20 @@ package com.ziyuan.perspective.strategy;
 import com.ziyuan.perspective.invokes.Trace;
 
 /**
- * CollectStrategy
+ * ErrorCollectStrategy
  *
  * @author ziyuan
- * @since 2017-02-22
+ * @since 2017-02-23
  */
-public interface CollectStrategy extends Strategy {
+public final class ErrorCollectStrategy implements CollectStrategy {
 
     /**
-     * 手机trace的策略
+     * 如果不成功，收集
      *
      * @param trace trace
      * @return 是否收集
      */
-    boolean collectTrace(Trace trace);
+    public boolean collectTrace(Trace trace) {
+        return !trace.isSuccess();
+    }
 }
