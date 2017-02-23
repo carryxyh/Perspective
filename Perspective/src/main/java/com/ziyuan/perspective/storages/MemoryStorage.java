@@ -75,6 +75,13 @@ public class MemoryStorage implements Storage {
         return new ArrayList<Trace>(tracing.values());
     }
 
+    public void remove(String traceId) {
+        if (StringUtils.isBlank(traceId)) {
+            return;
+        }
+        this.tracing.remove(traceId);
+    }
+
     public void clear() {
         tracing.clear();
         overTraces.clear();

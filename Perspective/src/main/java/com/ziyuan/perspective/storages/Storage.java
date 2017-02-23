@@ -56,6 +56,13 @@ public interface Storage {
     ArrayList<Trace> getTracing();
 
     /**
+     * 移除一个trace
+     *
+     * @param traceId 要移除的traceId
+     */
+    void remove(String traceId);
+
+    /**
      * 清理storage
      */
     void clear();

@@ -50,7 +50,9 @@ public final class ScheduleChecker implements Checker {
         executorService.submit(new Runnable() {
             public void run() {
                 for (Trace trace : tracing) {
-                    trace.checkTimeOut(now);
+                    if (trace.checkTimeOut(now)) {
+                        storage.remove(trace.getTraceId());
+                    }
                 }
             }
         });

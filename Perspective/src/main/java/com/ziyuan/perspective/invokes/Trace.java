@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Trace
@@ -90,17 +91,19 @@ public final class Trace extends AbstractCollectionInvoke {
      * @param ender    ender
      */
     public void endOneBranch(String branchId, Ender ender) {
+        long duration = ender.getTimestamp() - this.getStartTime();
         Branch b = allBranches.get(branchId);
         if (b == null) {
             return;
         }
+
         b.addEnder(ender);
+        //这里的逻辑用来控制：如果一个trace已经结束了，则不移除这个trace，而是等待后来的ender都返回了，才完成整个trace并移除
         if (this.finished()) {
             if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
                 if (!ender.isSuccess()) {
                     errorBranches.add(b);
                 } else {
-                    long duration = ender.getTimestamp() - this.getStartTime();
                     if (duration > Constants.TIME_OUT) {
                         //成功但是超时了
                         b.setState(InvokeState.TIMEOUT);
@@ -113,13 +116,13 @@ public final class Trace extends AbstractCollectionInvoke {
             return;
         }
 
-        long duration = ender.getTimestamp() - this.getStartTime();
         this.setDuration(duration);
         if (ender.isSuccess()) {
             if (duration < Constants.TIME_OUT) {
                 this.setState(InvokeState.OVER);
             } else {
                 this.setState(InvokeState.TIMEOUT);
+                this.setError(new TimeoutException("time out : cost " + duration + "ms"));
                 errorBranches.add(b);
             }
         } else {
@@ -137,8 +140,9 @@ public final class Trace extends AbstractCollectionInvoke {
      * 检查自己是否超时
      *
      * @param timestamp 时间点
+     * @return 是否超时
      */
-    public void checkTimeOut(long timestamp) {
-
+    public boolean checkTimeOut(long timestamp) {
+        return false;
     }
 }
