@@ -29,4 +29,14 @@ public interface Collector extends Serializable {
      * @param formatables
      */
     void receive(List<Formatable> formatables);
+
+    /**
+     * 开始手机
+     */
+    void beginCollect();
+
+    /**
+     * 关闭收集
+     */
+    void shutDownNow();
 }
