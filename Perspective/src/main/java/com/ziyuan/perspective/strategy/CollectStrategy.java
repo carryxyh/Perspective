@@ -6,7 +6,7 @@ package com.ziyuan.perspective.strategy;
 import com.ziyuan.perspective.invokes.Trace;
 
 /**
- * CollectStrategy
+ * CollectStrategy 收集策略
  *
  * @author ziyuan
  * @since 2017-02-22

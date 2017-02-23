@@ -4,7 +4,7 @@
 package com.ziyuan.perspective.invokes;
 
 /**
- * Ender
+ * Ender 标示着一个branch的结束（这里包括正常和异常结束）
  *
  * @author ziyuan
  * @since 2017-02-20
@@ -32,7 +32,7 @@ public final class Ender extends AbstractInvoke {
         this.setState(InvokeState.ERROR);
     }
 
-    public long getTimestamp() {
+    public long getEndTime() {
         return endTime;
     }
 

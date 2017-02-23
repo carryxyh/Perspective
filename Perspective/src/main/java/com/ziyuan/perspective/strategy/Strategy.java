@@ -6,7 +6,7 @@ package com.ziyuan.perspective.strategy;
 import java.io.Serializable;
 
 /**
- * Strategy
+ * Strategy 各种策略的抽象
  *
  * @author ziyuan
  * @since 2017-02-20

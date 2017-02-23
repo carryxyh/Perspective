@@ -6,14 +6,13 @@ package com.ziyuan.perspective.invokes;
 import com.ziyuan.perspective.Constants;
 import com.ziyuan.perspective.util.StorageUtil;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Trace
+ * Trace 一次完整的调用链
  *
  * @author ziyuan
  * @since 2017-02-20
@@ -51,11 +50,27 @@ public final class Trace extends AbstractCollectionInvoke {
             //TODO 这里以后完善，现在只收集失败的trace
         } else {
             //失败的
-            sb.append("Trace error : {").append("Trace name -> ").append(this.getName()).append(", ").append("error branches is : [ \n");
-            for (Branch b : errorBranches) {
-                sb.append(b.getName()).append(", the error is : ").append(b.getError()).append("\n");
+            if (this.isTimeOut()) {
+                sb.append("Trace timeout : {").append("Trace name -> ").append(this.getName()).append(", ").append("timeout branches is : [ \n");
+                List<Branch> timeOutBranches = new ArrayList<Branch>();
+                for (Branch b : this.getErrorBranch()) {
+                    if (b.isTimeOut()) {
+                        timeOutBranches.add(b);
+                    }
+                }
+                Collections.sort(timeOutBranches);
+                for (Branch b : timeOutBranches) {
+                    sb.append(b.getName()).append(", cost : ").append(b.getDuration()).append("ms").append("\n");
+                }
+                sb.append("]}");
+            } else {
+                //出现错误导致中断
+                sb.append("Trace error : {").append("Trace name -> ").append(this.getName()).append(", ").append("error branches is : [ \n");
+                for (Branch b : errorBranches) {
+                    sb.append(b.getName()).append(", the error is : ").append(b.getError()).append("\n");
+                }
+                sb.append("] \n").append("the break reason is -> ").append(this.getError().getMessage()).append("}");
             }
-            sb.append("] \n").append("the break reason is -> ").append(this.getError().getMessage()).append("}");
         }
         return sb.toString();
     }
@@ -91,7 +106,7 @@ public final class Trace extends AbstractCollectionInvoke {
      * @param ender    ender
      */
     public void endOneBranch(String branchId, Ender ender) {
-        long duration = ender.getTimestamp() - this.getStartTime();
+        long duration = ender.getEndTime() - this.getStartTime();
         Branch b = allBranches.get(branchId);
         if (b == null) {
             return;

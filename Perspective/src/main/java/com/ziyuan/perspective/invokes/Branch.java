@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.invokes;
 
+import com.ziyuan.perspective.Constants;
 import com.ziyuan.perspective.Exception.InvokeNumsException;
 import com.ziyuan.perspective.Exception.TraceNotFoundException;
 import com.ziyuan.perspective.util.StorageUtil;
@@ -10,7 +11,7 @@ import com.ziyuan.perspective.util.StorageUtil;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Branch
+ * Branch 分支，意味着一个线程.
  *
  * @author ziyuan
  * @since 2017-02-20
@@ -91,7 +92,8 @@ public final class Branch extends AbstractInvoke {
      */
     public void addEnder(Ender ender) {
         //设置结束时间
-        this.setDuration(ender.getTimestamp() - this.getStartTime());
+        long duration = ender.getEndTime() - this.getStartTime();
+        this.setDuration(duration);
 
         try {
             this.addInvoke(ender);
@@ -102,7 +104,11 @@ public final class Branch extends AbstractInvoke {
         }
 
         if (ender.isSuccess()) {
-            this.setState(InvokeState.OVER);
+            if (duration > Constants.TIME_OUT) {
+                this.setState(InvokeState.TIMEOUT);
+            } else {
+                this.setState(InvokeState.OVER);
+            }
         } else {
             this.setError(ender.getError());
             this.setState(ender.getState());

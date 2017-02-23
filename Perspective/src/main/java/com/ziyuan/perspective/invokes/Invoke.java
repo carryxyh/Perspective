@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @author ziyuan
  * @since 2017-02-20
  */
-public interface Invoke extends Serializable, Formatable {
+public interface Invoke extends Serializable, Formatable, Comparable<Invoke> {
 
     /**
      * invoke nodes的最大数量,防止递归调用死循环

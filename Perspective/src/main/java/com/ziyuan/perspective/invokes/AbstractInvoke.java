@@ -4,7 +4,7 @@
 package com.ziyuan.perspective.invokes;
 
 /**
- * AbstractInvoke
+ * AbstractInvoke invoke抽象类
  *
  * @author ziyuan
  * @since 2017-02-20
@@ -102,11 +102,40 @@ public abstract class AbstractInvoke implements Invoke {
         return traceId;
     }
 
+    /**
+     * 这里设置为受保护的，不允许外部更改持续时间
+     *
+     * @param duration 持续时间
+     */
     protected void setDuration(long duration) {
         this.duration = duration;
     }
 
-    protected long getStartTime() {
+    /**
+     * 获取当前invoke的开始时间
+     *
+     * @return 开始时间
+     */
+    public long getStartTime() {
         return startTime;
+    }
+
+    /**
+     * 是否超时
+     *
+     * @return 是否超时
+     */
+    public boolean isTimeOut() {
+        return this.getState() == InvokeState.TIMEOUT;
+    }
+
+    public int compareTo(Invoke o) {
+        if (this.getDuration() > o.getDuration()) {
+            return 1;
+        } else if (this.getDuration() < o.getDuration()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
