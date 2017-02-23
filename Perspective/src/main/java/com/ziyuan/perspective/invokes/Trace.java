@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.invokes;
 
+import com.ziyuan.perspective.Constants;
 import com.ziyuan.perspective.util.StorageUtil;
 
 import java.util.Map;
@@ -46,9 +47,14 @@ public final class Trace extends AbstractCollectionInvoke {
     public String format() {
         StringBuffer sb = new StringBuffer("");
         if (this.isSuccess()) {
-            //成功的
+            //TODO 这里以后完善，现在只收集失败的trace
         } else {
             //失败的
+            sb.append("Trace error : {").append("Trace name -> ").append(this.getName()).append(", ").append("error branches is : [ \n");
+            for (Branch b : errorBranches) {
+                sb.append(b.getName()).append(", the error is : ").append(b.getError()).append("\n");
+            }
+            sb.append("\n ]").append("the break reason is -> ").append(this.getError().getMessage()).append("}");
         }
         return sb.toString();
     }
@@ -80,23 +86,36 @@ public final class Trace extends AbstractCollectionInvoke {
         }
         if (this.finished()) {
             if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
-                //todo 这里判断如果ender错误，把这个branch同样放入到errorBranches中。如果成功，判断超时，超时也放入到errorBranches中
+                if (!ender.isSuccess()) {
+                    errorBranches.add(b);
+                } else {
+                    long duration = ender.getTimestamp() - this.getStartTime();
+                    if (duration > Constants.TIME_OUT) {
+                        //成功但是超时了
+                        b.setState(InvokeState.TIMEOUT);
+                        b.setDuration(duration);
+                        errorBranches.add(b);
+                    }
+                }
                 StorageUtil.endOneTrace(this);
             }
             return;
         }
 
+        long duration = ender.getTimestamp() - this.getStartTime();
+        this.setDuration(duration);
         if (ender.isSuccess()) {
-            //todo 这里根据超时时间来判断，状态应该设置为超时还是正常结束
-            this.setDuration(ender.getTimestamp() - this.getStartTime());
-            this.setState(InvokeState.OVER);
+            if (duration < Constants.TIME_OUT) {
+                this.setState(InvokeState.OVER);
+            } else {
+                this.setState(InvokeState.TIMEOUT);
+                errorBranches.add(b);
+            }
         } else {
             //不成功，直接结束一个trace
             this.setError(ender.getError());
             this.setState(ender.getState());
             this.errorBranches.add(b);
-            //todo
-            this.setDuration(ender.getTimestamp() - this.getStartTime());
         }
         if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
             StorageUtil.endOneTrace(this);
