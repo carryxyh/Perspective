@@ -80,13 +80,13 @@ public class InvokeTest extends TestCase {
         Thread.sleep(100);
 
         Ender enderConsumer = new Ender("consumer - soa over", trace.getTraceId(), consumerB.getBranchId());
-//        enderConsumer.setError(new NullPointerException("空指针！"));
+        enderConsumer.setError(new NullPointerException("空指针！"));
         trace.endOneBranch(consumerB.getBranchId(), enderConsumer);
 
         /*--------------------------到这里第一层结束----------------------------*/
 
         Ender enderWX = new Ender("weixin - meal over", trace.getTraceId(), mainT.getBranchId());
-//        enderWX.setError(new IllegalStateException("状态异常！"));
+        enderWX.setError(new IllegalStateException("状态异常！"));
         trace.endOneBranch(mainT.getBranchId(), enderWX);
 
         System.out.println("trace 追踪之后，状态为 ：" + trace.getState());

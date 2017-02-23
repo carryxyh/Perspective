@@ -32,9 +32,16 @@ public final class Branch extends AbstractInvoke {
      */
     private Invoke ownerInvoke;
 
-    protected Branch(String name, String traceId, String branchId, Invoke ownerInvoke) {
+    public Branch(String name, String traceId, String branchId, AbstractCollectionInvoke ownerInvoke) {
         super(name, traceId);
         this.ownerInvoke = ownerInvoke;
+        this.branchId = branchId;
+    }
+
+    public Branch(String name, String traceId, AbstractCollectionInvoke ownerInvoke) {
+        super(name, traceId);
+        this.ownerInvoke = ownerInvoke;
+        String branchId = traceId + "-" + ownerInvoke.increaseAndGetChildBranchNum();
         this.branchId = branchId;
     }
 

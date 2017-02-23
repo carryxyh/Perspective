@@ -77,6 +77,10 @@ public abstract class AbstractCollectionInvoke extends AbstractInvoke {
         return CHILD_BRANCH_NUM.incrementAndGet();
     }
 
+    public int getAndIncreaseChildBranchNum(){
+        return CHILD_BRANCH_NUM.getAndIncrement();
+    }
+
     public int decreaseAndGetChildBranchNum(){
         return CHILD_BRANCH_NUM.decrementAndGet();
     }

@@ -22,7 +22,7 @@ public class InvokeNode extends AbstractCollectionInvoke {
         super(name, traceId);
 
         //每一个node都有一个主branch
-        String branchId = traceId + "-" + this.increaseAndGetChildBranchNum();
+        String branchId = traceId + "-" + this.getAndIncreaseChildBranchNum();
         Branch b = new Branch(name + "-main", traceId, branchId, this);
 
         //放到trace中方便查找

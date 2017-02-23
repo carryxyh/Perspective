@@ -31,7 +31,7 @@ public final class Trace extends AbstractCollectionInvoke {
 
     protected Trace(String name, String traceId) {
         super(name, traceId);
-        String branchId = traceId + "-" + this.increaseAndGetChildBranchNum();
+        String branchId = traceId + "-" + this.getAndIncreaseChildBranchNum();
         Branch b = new Branch(name + "-main", traceId, branchId, this);
         super.CHILD_BRANCHES.add(b);
         this.allBranches.put(branchId, b);
@@ -54,7 +54,7 @@ public final class Trace extends AbstractCollectionInvoke {
             for (Branch b : errorBranches) {
                 sb.append(b.getName()).append(", the error is : ").append(b.getError()).append("\n");
             }
-            sb.append("\n ]").append("the break reason is -> ").append(this.getError().getMessage()).append("}");
+            sb.append("] \n").append("the break reason is -> ").append(this.getError().getMessage()).append("}");
         }
         return sb.toString();
     }
