@@ -63,12 +63,22 @@ public final class Trace extends AbstractCollectionInvoke {
         return allBranches.get(branchId);
     }
 
+    /**
+     * 为这个trace放入一个branch
+     *
+     * @param branch branch
+     */
     public void putBranch(Branch branch) {
         if (branch != null) {
             allBranches.put(branch.getBranchId(), branch);
         }
     }
 
+    /**
+     * 获取错误的branch集合
+     *
+     * @return 错误的branch集合
+     */
     public Set<Branch> getErrorBranch() {
         return errorBranches;
     }
@@ -121,5 +131,14 @@ public final class Trace extends AbstractCollectionInvoke {
         if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
             StorageUtil.endOneTrace(this);
         }
+    }
+
+    /**
+     * 检查自己是否超时
+     *
+     * @param timestamp 时间点
+     */
+    public void checkTimeOut(long timestamp) {
+
     }
 }
