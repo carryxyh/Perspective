@@ -113,16 +113,19 @@ public final class Trace extends AbstractCollectionInvoke {
         }
 
         b.addEnder(ender);
+        //控制这个ender是否是最后一个结束的ender
+        boolean flag = this.increaseAndGetEndBranchNum() == this.getChildBranchNum();
+
         //这里的逻辑用来控制：如果一个trace已经结束了，则不移除这个trace，而是等待后来的ender都返回了，才完成整个trace并移除
         if (this.finished()) {
-            if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
-                if (!ender.isSuccess()) {
+            if (ender.isSuccess()) {
+                if (duration > Constants.TIME_OUT) {
                     errorBranches.add(b);
-                } else {
-                    if (duration > Constants.TIME_OUT) {
-                        errorBranches.add(b);
-                    }
                 }
+            } else {
+                errorBranches.add(b);
+            }
+            if (flag) {
                 StorageUtil.endOneTrace(this);
             }
             return;
@@ -131,7 +134,9 @@ public final class Trace extends AbstractCollectionInvoke {
         this.setDuration(duration);
         if (ender.isSuccess()) {
             if (duration < Constants.TIME_OUT) {
-                this.setState(InvokeState.OVER);
+                if (flag) {
+                    this.setState(InvokeState.OVER);
+                }
             } else {
                 this.setState(InvokeState.TIMEOUT);
                 this.setError(new TimeoutException("time out : cost " + duration + "ms"));
@@ -143,7 +148,7 @@ public final class Trace extends AbstractCollectionInvoke {
             this.setState(ender.getState());
             this.errorBranches.add(b);
         }
-        if (this.increaseAndGetEndBranchNum() == this.getChildBranchNum()) {
+        if (flag) {
             StorageUtil.endOneTrace(this);
         }
     }

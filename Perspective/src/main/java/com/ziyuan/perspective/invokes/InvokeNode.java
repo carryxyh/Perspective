@@ -11,7 +11,7 @@ import com.ziyuan.perspective.util.StorageUtil;
  * @author ziyuan
  * @since 2017-02-20
  */
-public class InvokeNode extends AbstractCollectionInvoke {
+public final class InvokeNode extends AbstractCollectionInvoke {
 
     /**
      * 拥有这个node的branchId
