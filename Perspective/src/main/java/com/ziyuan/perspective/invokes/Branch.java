@@ -97,10 +97,19 @@ public final class Branch extends AbstractInvoke {
 
     /**
      * 添加一个Ender，结束这个branch，这个方法调用方只能是trace！！！
+     * <p>
+     * 一进来进行判断的原因：
+     * 防止出现的情况是：长时间不结束，被checker检查之后强行结束，然后又被调用该方法加入ender
+     * ，这种情况不接受这个ender，仍然使用checker中添加的Ender，这种情况比较少见
      *
-     * @param ender
+     * @param ender ender
      */
     public void addEnder(Ender ender) {
+        //这里直接返回，见上方注解
+        if (this.isTimeOut()) {
+            return;
+        }
+
         //设置结束时间
         long duration = ender.getEndTime() - this.getStartTime();
         this.setDuration(duration);

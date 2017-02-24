@@ -4,6 +4,8 @@
 package com.ziyuan.perspective.checker;
 
 import com.ziyuan.perspective.Constants;
+import com.ziyuan.perspective.invokes.Branch;
+import com.ziyuan.perspective.invokes.Ender;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.storages.Storage;
 import com.ziyuan.perspective.util.StorageUtil;
@@ -126,7 +128,11 @@ public final class ScheduleChecker implements Checker {
         public void run() {
             for (Trace trace : traces) {
                 if (trace.checkTimeOut(now)) {
-                    storage.remove(trace.getTraceId());
+                    //检查到长时间不返回，直接给主线程添加一个ender，强行返回并移除，防止发生泄漏
+                    Branch traceMain = trace.getMainBranch();
+                    Ender timeOutEnder = new Ender("Time out Exception Ender", trace.getTraceId(), traceMain.getBranchId());
+                    trace.endOneBranch(traceMain.getBranchId(), timeOutEnder);
+                    storage.endOneTrace(trace);
                 }
             }
         }

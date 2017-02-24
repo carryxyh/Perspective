@@ -18,7 +18,7 @@ public final class Ender extends AbstractInvoke {
 
     private String ownerBranchId;
 
-    protected Ender(String name, String traceId, String ownerBranchId) {
+    public Ender(String name, String traceId, String ownerBranchId) {
         super(name, traceId);
         endTime = System.currentTimeMillis();
         //默认的ender就是正常结束的
