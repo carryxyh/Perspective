@@ -120,9 +120,6 @@ public final class Trace extends AbstractCollectionInvoke {
                     errorBranches.add(b);
                 } else {
                     if (duration > Constants.TIME_OUT) {
-                        //成功但是超时了
-                        b.setState(InvokeState.TIMEOUT);
-                        b.setDuration(duration);
                         errorBranches.add(b);
                     }
                 }
