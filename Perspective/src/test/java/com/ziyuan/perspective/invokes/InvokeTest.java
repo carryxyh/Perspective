@@ -162,10 +162,10 @@ public class InvokeTest extends TestCase {
         /*-------------------到这里第三层开始-----------------------------*/
 
         //模拟方法调用耗时
-        Thread.sleep(100);
+        Thread.sleep(3000);
 
         Ender enderCart = new Ender("cart - soa over", trace.getTraceId(), cart.getBranchId());
-//        enderCart.setError(new FileNotFoundException("文件找不到！"));
+        enderCart.setError(new FileNotFoundException("文件找不到！"));
         trace.endOneBranch(cart.getBranchId(), enderCart);
 
         /*-------------------到这里第三层结束-----------------------------*/

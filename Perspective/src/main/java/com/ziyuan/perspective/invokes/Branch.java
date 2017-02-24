@@ -106,7 +106,7 @@ public final class Branch extends AbstractInvoke {
      */
     public void addEnder(Ender ender) {
         //这里直接返回，见上方注解
-        if (this.isTimeOut()) {
+        if (this.finished()) {
             return;
         }
 
