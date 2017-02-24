@@ -47,7 +47,11 @@ public final class Trace extends AbstractCollectionInvoke {
     public String format() {
         StringBuffer sb = new StringBuffer("");
         if (this.isSuccess()) {
-            //TODO 这里以后完善，现在只收集失败的trace
+            sb.append("Trace is ok !, cost time : ").append(this.getDuration()).append(", branches cost : [");
+            for (Branch b : allBranches.values()) {
+                sb.append(b.getName()).append(", cost : ").append(b.getDuration()).append("ms").append("\n");
+            }
+            sb.append("]");
         } else {
             //失败的
             if (this.isTimeOut()) {
@@ -160,6 +164,6 @@ public final class Trace extends AbstractCollectionInvoke {
      * @return 是否超时
      */
     public boolean checkTimeOut(long timestamp) {
-        return false;
+        return timestamp - this.getStartTime() > Constants.TIME_OUT;
     }
 }

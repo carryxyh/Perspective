@@ -9,6 +9,7 @@ import com.ziyuan.perspective.Exception.TraceNotFoundException;
 import com.ziyuan.perspective.util.StorageUtil;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Branch 分支，意味着一个线程.
@@ -33,10 +34,19 @@ public final class Branch extends AbstractInvoke {
      */
     private Invoke ownerInvoke;
 
+    private AtomicInteger suffix = new AtomicInteger(1);
+
+    @Deprecated
     public Branch(String name, String traceId, String branchId, Invoke ownerInvoke) {
         super(name, traceId);
         this.ownerInvoke = ownerInvoke;
         this.branchId = branchId;
+    }
+
+    public Branch(String name, String traceId, Branch ownerInvoke) {
+        super(name, traceId);
+        this.ownerInvoke = ownerInvoke;
+        this.branchId = ownerInvoke.getBranchId() + "-" + suffix.getAndIncrement();
     }
 
     public Branch(String name, String traceId, AbstractCollectionInvoke ownerInvoke) {
