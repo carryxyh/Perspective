@@ -4,7 +4,7 @@
 package com.ziyuan.perspective.Exception;
 
 /**
- * TraceNotFoundException
+ * TraceNotFoundException trace拿不到的异常
  *
  * @author ziyuan
  * @since 2017-02-21

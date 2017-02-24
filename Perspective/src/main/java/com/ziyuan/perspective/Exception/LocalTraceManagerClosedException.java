@@ -4,7 +4,7 @@
 package com.ziyuan.perspective.Exception;
 
 /**
- * LocalTraceManagerClosedException
+ * LocalTraceManagerClosedException LocalTraceManager已经关闭的异常
  *
  * @author ziyuan
  * @since 2017-02-21

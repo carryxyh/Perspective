@@ -4,7 +4,7 @@
 package com.ziyuan.perspective.Exception;
 
 /**
- * InvokeNumsException
+ * InvokeNumsException invoke数量异常,一个Trace中的invoke数量超过了最大值
  *
  * @author ziyuan
  * @since 2017-02-21
