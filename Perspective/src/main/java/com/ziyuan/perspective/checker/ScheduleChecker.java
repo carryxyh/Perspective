@@ -46,14 +46,14 @@ public final class ScheduleChecker implements Checker {
     });
 
     /**
-     * 开始检查
+     * 开始检查,这里47秒检查一次,主要是防止跟收集线程冲突
      */
     public void checkBegin() {
         scheduled.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 check();
             }
-        }, 1, 181, TimeUnit.SECONDS);
+        }, 1, 47, TimeUnit.SECONDS);
     }
 
     /**
@@ -61,7 +61,7 @@ public final class ScheduleChecker implements Checker {
      */
     private void check() {
         final long now = System.currentTimeMillis();
-        final List<Trace> tracing = storage.getTracing();
+        List<Trace> tracing = storage.getTracing();
         if (CollectionUtils.isEmpty(tracing)) {
             return;
         }

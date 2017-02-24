@@ -54,6 +54,7 @@ public final class MemoryCollector implements Collector {
                         finalResult.add(trace);
                     }
                 }
+                outPutResult(finalResult);
             }
         }, 1, Constants.COLLECT_PERIOD, TimeUnit.SECONDS);
     }
