@@ -18,7 +18,7 @@ public final class InvokeNode extends AbstractCollectionInvoke {
      */
     private final String ownerBranchId;
 
-    protected InvokeNode(String name, String traceId, String ownerBranchId) {
+    public InvokeNode(String name, String traceId, String ownerBranchId) {
         super(name, traceId);
 
         //每一个node都有一个主branch

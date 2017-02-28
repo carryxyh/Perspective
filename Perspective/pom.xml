@@ -45,9 +45,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-  <modules>
-    <module>perpective-core</module>
-    <module>perpective-dubbo</module>
-    <module>perpective-spring</module>
-  </modules>
 </project>

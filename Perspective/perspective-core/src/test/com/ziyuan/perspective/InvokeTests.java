@@ -1,22 +1,26 @@
 /*
  * Copyright (C) 2009-2016 Hangzhou 2Dfire Technology Co., Ltd. All rights reserved
  */
-package com.ziyuan.perspective.invokes;
+package com.ziyuan.perspective;
 
 import com.ziyuan.perspective.LocalTraceManager;
 import com.ziyuan.perspective.SymbolFactory;
+import com.ziyuan.perspective.invokes.Branch;
+import com.ziyuan.perspective.invokes.Ender;
+import com.ziyuan.perspective.invokes.InvokeNode;
+import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.util.StorageUtil;
 import junit.framework.TestCase;
 
 import java.io.FileNotFoundException;
 
 /**
- * InvokeTest
+ * InvokeTests
  *
  * @author ziyuan
- * @since 2017-02-22
+ * @since 2017-02-28
  */
-public class InvokeTest extends TestCase {
+public class InvokeTests extends TestCase {
 
     public void testChain() throws Exception {
 

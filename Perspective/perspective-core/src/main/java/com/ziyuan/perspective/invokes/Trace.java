@@ -29,7 +29,7 @@ public final class Trace extends AbstractCollectionInvoke {
      */
     private Set<Branch> errorBranches = new CopyOnWriteArraySet<Branch>();
 
-    protected Trace(String name, String traceId) {
+    public Trace(String name, String traceId) {
         super(name, traceId);
         String branchId = traceId + "-" + this.getAndIncreaseChildBranchNum();
         Branch b = new Branch(name + "-main", traceId, branchId, this);
