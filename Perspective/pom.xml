@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ziyuan.perspective</groupId>
     <artifactId>Perspective</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
     <name>Perspective</name>
@@ -17,6 +17,12 @@
     </developers>
 
     <url>http://maven.apache.org</url>
+
+    <modules>
+        <module>perspective-core</module>
+        <module>perspective-spring</module>
+        <module>perspective-dubbo</module>
+    </modules>
 
     <dependencies>
 
@@ -39,4 +45,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+  <modules>
+    <module>perpective-core</module>
+    <module>perpective-dubbo</module>
+    <module>perpective-spring</module>
+  </modules>
 </project>
