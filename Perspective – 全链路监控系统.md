@@ -75,3 +75,15 @@
 <br/>
 
 从第一天开始设计、构思到写到现在已经过去了一个多周了，期待Perspective的诞生！<br/>
+
+-----------------------------
+
+三月的第一天开始设计dubbo的过滤器，调整了以下几个逻辑：<br/>
+
+1. 第一次初始化Trace的时候，要在LocalManager中放入Trace的main branch。在所有未来的切面中，**如果是一个InvokeNode级别的Inovke，则在LocalManager放入这个Node的main branch，如果是一个Branch级别的invoke，放入他自己**。这里将来考虑把LocalManager废除掉，整个ThreadLocal放到Trace中，这样做的目的：***防止超时的线程无法通过finally块中的ThreadLocal.remove移除***。放到Trace中可以直接把整个ThreadLocal = null。<br/>
+2. 线程工厂里要注意的地方：***新增线程时，要在线程开始时，把当前线程的Branch放入到ThreadLocal中***。
+
+总结一下：<br/>
+可以看到，真个架构模型有点像cat了，而且是越来越像，这不是我期望看到的，因为cat太成熟了，如果说Perspective只是一个把存储和输出轻量化到内存的框架，那么是有点点违背初衷的。<br/>
+
+以后Perspective的性质可能变成：嵌入式的分布式系统全链路监控系统。<br/>
