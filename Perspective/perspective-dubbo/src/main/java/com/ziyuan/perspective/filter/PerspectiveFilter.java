@@ -4,11 +4,9 @@
 package com.ziyuan.perspective.filter;
 
 import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.rpc.*;
-import com.ziyuan.perspective.Exception.SymbolIdEmptyException;
 import com.ziyuan.perspective.LocalManager;
-import com.ziyuan.perspective.invokes.Invoke;
+import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.storages.Storage;
 import com.ziyuan.perspective.util.StorageUtil;
@@ -32,92 +30,45 @@ public class PerspectiveFilter implements Filter {
      */
     private static final String P_OWN_BRANCH_ID = "own_branch_id";
 
+    /**
+     * storage 的引用
+     */
     private Storage storage = StorageUtil.getStorage();
 
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        boolean isFirstTier = isInitTier();
-        String traceId = getCentreTraceId(isFirstTier);
-        if (StringUtils.isBlank(traceId)) {
-            //TODO 这里需要记录日志为什么拿不到TraceId
-            return invoker.invoke(invocation);
-        }
-
-        Invoke ownerInvoke;
-        if (isFirstTier) {
-            //第一层
-            try {
-                ownerInvoke = LocalManager.getManager().get();
-            } catch (Exception e) {
-
-            }
-        } else {
-            String branchId = invocation.getAttachment(P_OWN_BRANCH_ID);
-            try {
-                ownerInvoke = storage.findBranch(traceId, branchId);
-            } catch (SymbolIdEmptyException e) {
-                //TODO log
-                return invoker.invoke(invocation);
-            }
-        }
-
         RpcContext context = RpcContext.getContext();
-        //false说明世consumer side
+
+        Trace centreTrace = getCentreTrace();
+
         boolean isProvider = context.isProviderSide();
         if (isProvider) {
-            //provider需要把invocation中的两个Id存下来 以便后面使用
-            context.setAttachment(P_CENTRE_TRACE_ID, traceId);
-            context.setAttachment(P_OWN_BRANCH_ID, invocation.getAttachment(P_OWN_BRANCH_ID));
+
+
         } else {
-            //这里需要开启一个branch 把这个branch存入owner branch中
 
         }
 
-        Result result;
-        try {
-            result = invoker.invoke(invocation);
-        } catch (RpcException e) {
-            //添加ender
-            throw e;
-        }
-        return result;
+        return null;
     }
 
     /**
-     * 获得traceId
+     * 获取当前的trace
      *
-     * @return traceId
+     * @return 当前的trace
      */
-    private String getCentreTraceId(boolean isFirstTier) {
-        if (isFirstTier) {
-            LocalManager localTraceManager = LocalManager.getManager();
-            Trace trace = null;
-            try {
-                trace = localTraceManager.get();
-            } catch (Exception e) {
-                // ignore
-            }
-            return trace.getTraceId();
-        } else {
-            //说明这里已经不是API层了,从中央存储里取Id
-            RpcContext context = RpcContext.getContext();
-            String traceId = context.getAttachment(P_CENTRE_TRACE_ID);
-            return traceId;
-        }
+    private Trace getCentreTrace() {
+        RpcContext context = RpcContext.getContext();
+        Trace trace = StorageUtil.findTraceById(context.getAttachment(P_CENTRE_TRACE_ID));
+        return trace;
     }
 
     /**
-     * 如果是第一层，可以从中拿到trace 如果不是 threadlocal失效拿不到
+     * 获取当前线程的branch
      *
-     * @return 是否是第一层（一般是API层）
+     * @return 当前线程的branch
      */
-    private boolean isInitTier() {
-        LocalManager localTraceManager = LocalManager.getManager();
-        Trace trace = null;
-        try {
-            trace = localTraceManager.get();
-        } catch (Exception e) {
-            //TODO 记录日志
-        }
-        return trace != null;
+    private Branch getOwnerBranch() {
+        Branch branch = LocalManager.getManager().getOwnBranch();
+        return branch;
     }
 }
