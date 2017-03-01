@@ -3,8 +3,6 @@
  */
 package com.ziyuan.perspective;
 
-import com.ziyuan.perspective.LocalTraceManager;
-import com.ziyuan.perspective.SymbolFactory;
 import com.ziyuan.perspective.invokes.Branch;
 import com.ziyuan.perspective.invokes.Ender;
 import com.ziyuan.perspective.invokes.InvokeNode;
@@ -24,7 +22,7 @@ public class InvokeTests extends TestCase {
 
     public void testChain() throws Exception {
 
-        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
+        LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin-meal", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 
@@ -69,7 +67,7 @@ public class InvokeTests extends TestCase {
     }
 
     public void testMoreInfo() throws Exception {
-        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
+        LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 
@@ -108,7 +106,7 @@ public class InvokeTests extends TestCase {
     }
 
     public void testTimeOut() throws Exception {
-        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
+        LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 
@@ -147,7 +145,7 @@ public class InvokeTests extends TestCase {
     }
 
     public void testThreeNode() throws Exception {
-        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
+        LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 

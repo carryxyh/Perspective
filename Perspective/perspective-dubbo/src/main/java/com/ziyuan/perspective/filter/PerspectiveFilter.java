@@ -7,7 +7,7 @@ import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.rpc.*;
 import com.ziyuan.perspective.Exception.SymbolIdEmptyException;
-import com.ziyuan.perspective.LocalTraceManager;
+import com.ziyuan.perspective.LocalManager;
 import com.ziyuan.perspective.invokes.Invoke;
 import com.ziyuan.perspective.invokes.Trace;
 import com.ziyuan.perspective.storages.Storage;
@@ -46,7 +46,7 @@ public class PerspectiveFilter implements Filter {
         if (isFirstTier) {
             //第一层
             try {
-                ownerInvoke = LocalTraceManager.getManager().get();
+                ownerInvoke = LocalManager.getManager().get();
             } catch (Exception e) {
 
             }
@@ -89,7 +89,7 @@ public class PerspectiveFilter implements Filter {
      */
     private String getCentreTraceId(boolean isFirstTier) {
         if (isFirstTier) {
-            LocalTraceManager localTraceManager = LocalTraceManager.getManager();
+            LocalManager localTraceManager = LocalManager.getManager();
             Trace trace = null;
             try {
                 trace = localTraceManager.get();
@@ -111,7 +111,7 @@ public class PerspectiveFilter implements Filter {
      * @return 是否是第一层（一般是API层）
      */
     private boolean isInitTier() {
-        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
+        LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = null;
         try {
             trace = localTraceManager.get();
