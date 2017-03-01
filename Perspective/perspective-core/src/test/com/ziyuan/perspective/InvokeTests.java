@@ -24,7 +24,7 @@ public class InvokeTests extends TestCase {
 
     public void testChain() throws Exception {
 
-        LocalTraceManager localTraceManager = LocalTraceManager.getInstance();
+        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
         Trace trace = new Trace("weixin-meal", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 
@@ -69,7 +69,7 @@ public class InvokeTests extends TestCase {
     }
 
     public void testMoreInfo() throws Exception {
-        LocalTraceManager localTraceManager = LocalTraceManager.getInstance();
+        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 
@@ -108,7 +108,7 @@ public class InvokeTests extends TestCase {
     }
 
     public void testTimeOut() throws Exception {
-        LocalTraceManager localTraceManager = LocalTraceManager.getInstance();
+        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 
@@ -147,7 +147,7 @@ public class InvokeTests extends TestCase {
     }
 
     public void testThreeNode() throws Exception {
-        LocalTraceManager localTraceManager = LocalTraceManager.getInstance();
+        LocalTraceManager localTraceManager = LocalTraceManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
         localTraceManager.add(trace);
 

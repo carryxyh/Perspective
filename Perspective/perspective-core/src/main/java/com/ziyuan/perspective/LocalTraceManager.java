@@ -63,7 +63,7 @@ public final class LocalTraceManager {
 
     private static final LocalTraceManager localTraceManager = new LocalTraceManager();
 
-    public static LocalTraceManager getInstance() {
+    public static LocalTraceManager getManager() {
         return localTraceManager;
     }
 }
