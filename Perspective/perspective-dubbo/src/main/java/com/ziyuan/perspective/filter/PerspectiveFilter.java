@@ -54,8 +54,14 @@ public class PerspectiveFilter implements Filter {
             String ownerBranchId = invocation.getAttachment(P_BRANCH_ID);
             holdIds(context, centreTrace.getTraceId(), ownerBranchId);
 
-            Branch branch = new Branch(invoker.getUrl().getPath() + "." + invocation.getMethodName(), centreTrace.getTraceId(), centreTrace.getOneBranch(ownerBranchId));
+            Branch owner = centreTrace.getOneBranch(ownerBranchId);
+            Branch branch = new Branch(invoker.getUrl().getPath() + "." + invocation.getMethodName(), centreTrace.getTraceId(), owner);
             localManager.addBranch(branch);
+            try {
+                owner.addInvoke(branch);
+            } catch (Exception e) {
+                throw new RpcException(e.getMessage(), e);
+            }
 
             Result result;
             Ender ender = new Ender(branch.getName() + "- end", centreTrace.getTraceId(), branch.getBranchId());

@@ -24,14 +24,14 @@ public class InvokeTests extends TestCase {
 
         LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin-meal", SymbolFactory.createTraceId());
-        localTraceManager.add(trace);
+        localTraceManager.addBranch(trace.getMainBranch());
 
         //weixin-meal main
         Branch mainT = trace.getMainBranch();
 
         /*-------------------到这里第一层开始-----------------------------*/
 
-        InvokeNode invokeNode1 = new InvokeNode("weixin-meal 中的一个方法", localTraceManager.get().getTraceId(), mainT.getBranchId());
+        InvokeNode invokeNode1 = new InvokeNode("weixin-meal 中的一个方法", trace.getTraceId(), mainT.getBranchId());
         mainT.addInvoke(invokeNode1);
         // weixin-method main
         Branch mainW = invokeNode1.getMainBranch();
@@ -69,13 +69,13 @@ public class InvokeTests extends TestCase {
     public void testMoreInfo() throws Exception {
         LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
-        localTraceManager.add(trace);
+        localTraceManager.addBranch(trace.getMainBranch());
 
         /*-------------------到这里第一层开始-----------------------------*/
 
         //weixin-meal main
         Branch mainT = trace.getMainBranch();
-        Branch consumerB = new Branch("consumer - soa", localTraceManager.get().getTraceId(), localTraceManager.get().getTraceId() + "-2", mainT);
+        Branch consumerB = new Branch("consumer - soa", trace.getTraceId(), trace.getTraceId() + "-2", mainT);
         mainT.addInvoke(consumerB);
 
         /*-------------------到这里第二层开始-----------------------------*/
@@ -108,13 +108,13 @@ public class InvokeTests extends TestCase {
     public void testTimeOut() throws Exception {
         LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
-        localTraceManager.add(trace);
+        localTraceManager.addBranch(trace.getMainBranch());
 
         /*-------------------到这里第一层开始-----------------------------*/
 
         //weixin-meal main
         Branch mainT = trace.getMainBranch();
-        Branch consumerB = new Branch("consumer - soa", localTraceManager.get().getTraceId(), localTraceManager.get().getTraceId() + "-2", mainT);
+        Branch consumerB = new Branch("consumer - soa", trace.getTraceId(), trace.getTraceId() + "-2", mainT);
         mainT.addInvoke(consumerB);
 
         /*-------------------到这里第二层开始-----------------------------*/
@@ -147,13 +147,13 @@ public class InvokeTests extends TestCase {
     public void testThreeNode() throws Exception {
         LocalManager localTraceManager = LocalManager.getManager();
         Trace trace = new Trace("weixin - meal trace", SymbolFactory.createTraceId());
-        localTraceManager.add(trace);
+        localTraceManager.addBranch(trace.getMainBranch());
 
         /*-------------------到这里第一层开始-----------------------------*/
 
         //weixin-meal main
         Branch mainT = trace.getMainBranch();
-        Branch consumerB = new Branch("consumer - soa", localTraceManager.get().getTraceId(), localTraceManager.get().getTraceId() + "-2", mainT);
+        Branch consumerB = new Branch("consumer - soa", trace.getTraceId(), trace.getTraceId() + "-2", mainT);
         mainT.addInvoke(consumerB);
 
         /*-------------------到这里第二层开始-----------------------------*/

@@ -1,13 +1,17 @@
 /*
  * Copyright (C) 2009-2016 Hangzhou 2Dfire Technology Co., Ltd. All rights reserved
  */
-package com.ziyuan.perspective.annotations;
+package com.ziyuan.perspective;
 
 /**
- * InvokeNode
+ * InvokeType
  *
  * @author ziyuan
- * @since 2017-02-28
+ * @since 2017-03-06
  */
-public @interface InvokeNode {
+public enum InvokeType {
+
+    NODE,
+
+    BRANCH
 }
