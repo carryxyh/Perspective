@@ -24,6 +24,7 @@ public final class InvokeNode extends AbstractCollectionInvoke {
         //每一个node都有一个主branch
         String branchId = traceId + "-" + this.getAndIncreaseChildBranchNum();
         Branch b = new Branch(name + "-main", traceId, branchId, this);
+        b.setMain(true);
 
         //放到trace中方便查找
         Trace t = StorageUtil.findTraceById(this.getTraceId());

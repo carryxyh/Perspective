@@ -34,6 +34,11 @@ public final class Branch extends AbstractInvoke {
      */
     private Invoke ownerInvoke;
 
+    /**
+     * 是否是主线程
+     */
+    private boolean isMain = false;
+
     private AtomicInteger suffix = new AtomicInteger(1);
 
     @Deprecated
@@ -132,5 +137,13 @@ public final class Branch extends AbstractInvoke {
             this.setError(ender.getError());
             this.setState(ender.getState());
         }
+    }
+
+    public boolean isMain() {
+        return isMain;
+    }
+
+    public void setMain(boolean main) {
+        isMain = main;
     }
 }

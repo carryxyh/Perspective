@@ -33,6 +33,7 @@ public final class Trace extends AbstractCollectionInvoke {
         super(name, traceId);
         String branchId = traceId + "-" + this.getAndIncreaseChildBranchNum();
         Branch b = new Branch(name + "-main", traceId, branchId, this);
+        b.setMain(true);
         super.CHILD_BRANCHES.add(b);
         this.allBranches.put(branchId, b);
         StorageUtil.newTrace(this);
