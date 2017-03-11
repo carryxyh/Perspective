@@ -77,9 +77,9 @@ public class PerspectiveFilter implements Filter {
         } else {
 
             Branch ownerBranch = localManager.getOwnBranch();
-            Map<String, String> attachMents = invocation.getAttachments();
+            Map<String, String> attachments = invocation.getAttachments();
             //Id传到下一级
-            attachMents.put(P_BRANCH_ID, ownerBranch.getBranchId());
+            attachments.put(P_BRANCH_ID, ownerBranch.getBranchId());
             Result result = invoker.invoke(invocation);
             return result;
         }
