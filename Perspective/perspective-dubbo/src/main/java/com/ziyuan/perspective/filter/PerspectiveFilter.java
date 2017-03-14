@@ -3,6 +3,7 @@
  */
 package com.ziyuan.perspective.filter;
 
+import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.ziyuan.perspective.LocalManager;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @author ziyuan
  * @since 2017-02-28
  */
-@Activate(group = {"provider", "consumer"}, order = -10001)
+@Activate(group = {Constants.PROVIDER, Constants.CONSUMER}, order = -10001)
 public class PerspectiveFilter implements Filter {
 
     /**
@@ -43,6 +44,7 @@ public class PerspectiveFilter implements Filter {
      */
     private LocalManager localManager = LocalManager.getManager();
 
+    @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         RpcContext context = RpcContext.getContext();
 

@@ -12,6 +12,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>perspective-dubbo</name>
     <url>http://maven.apache.org</url>
+    <packaging>jar</packaging>
 
     <dependencies>
 
