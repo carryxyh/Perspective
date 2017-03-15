@@ -7,12 +7,12 @@ import javax.servlet.*;
 import java.io.IOException;
 
 /**
- * PerspectiveFilter
+ * PerspectiveInitFilter
  *
  * @author ziyuan
  * @since 2017-03-06
  */
-public class PerspectiveFilter implements Filter {
+public class PerspectiveInitFilter implements Filter {
 
     /**
      * 这里初始化一些东西

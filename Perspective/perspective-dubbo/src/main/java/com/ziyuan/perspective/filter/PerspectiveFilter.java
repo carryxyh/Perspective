@@ -16,7 +16,7 @@ import com.ziyuan.perspective.util.StorageUtil;
 import java.util.Map;
 
 /**
- * PerspectiveFilter perspective的filter
+ * PerspectiveInitFilter perspective的filter
  *
  * @author ziyuan
  * @since 2017-02-28
